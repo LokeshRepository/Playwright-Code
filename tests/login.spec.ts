@@ -12,7 +12,6 @@ test.describe('NovaCRM Login', () => {
     await loginPage.login(users.validUser.username, users.validUser.password);
     await dashboardPage.assertDashboardVisible();
   });
-
   test('invalid login should stay on login page', async ({ page }) => {
     const loginPage = new LoginPage(page);
 
