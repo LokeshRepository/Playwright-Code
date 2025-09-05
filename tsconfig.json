@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    // File Layout (optional)
+    "rootDir": "./",
+    "outDir": "./dist",
+
+    // Target environment
+    "target": "ESNext",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+
+    // Type definitions
+    "types": ["node", "@playwright/test"],
+
+    // Output helpers
+    "sourceMap": true,
+    "declaration": false,          // not needed unless you publish
+    "declarationMap": false,
+
+    // Strictness
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    // Recommended
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+
+    // Isolated module processing
+    "isolatedModules": true
+  },
+  "include": ["tests/**/*.ts", "playwright.config.ts"],
+  "exclude": ["node_modules"]
+}
