@@ -13,7 +13,7 @@ test.describe('NovaCRM Login', () => {
     await dashboardPage.assertDashboardVisible();
   });
 
-  test('invalid login should stay on login page and show error message for invali user', async ({ page }) => {
+  test('invalid login should stay on login page and show error message for invalid user', async ({ page }) => {
     const loginPage = new LoginPage(page);
 
     await loginPage.goto();

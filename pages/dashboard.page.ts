@@ -11,4 +11,9 @@ export class DashboardPage {
   async assertDashboardVisible() {
     await expect(this.page.locator(this.dashboardHeader)).toBeVisible({ timeout: 30000 });
   }
+
+   async clickhome() {
+    await expect(this.page.locator(this.dashboardHeader)).toBeVisible({ timeout: 30000 });
+  }
+
 }
