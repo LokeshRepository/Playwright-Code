@@ -5,3 +5,8 @@ allure-report/
 allure-results/
 .env
 *.log
+
+# Playwright
+/playwright-report/
+/blob-report/
+/playwright/.cache/
