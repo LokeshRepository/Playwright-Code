@@ -1,85 +1,61 @@
-import { test, expect, Page } from '@playwright/test';
-import { LoginPage } from '../pages/login.page';
-import { DashboardPage } from '../pages/dashboard.page';
-import { users } from '../utils/test-data';
-test('NovaCRM dashboard navigation', async ({ page }: { page: Page }) => {
-  // Login
-const loginPage = new LoginPage(page);
-    const dashboardPage = new DashboardPage(page);
+import { test, expect } from '@playwright/test';
 
-    await loginPage.goto();
-    await loginPage.login(users.validUser.username, users.validUser.password);
-    await dashboardPage.assertDashboardVisible();
+test('1. Dashboard Redirection checking', async ({ page }) => {
+  await page.goto('https://app.novacrm.ca/');
+  await page.getByRole('textbox', { name: 'Email' }).click();
+  await page.getByRole('textbox', { name: 'Email' }).fill('lokesh@mmnovatech.com');
+  await page.getByRole('textbox', { name: 'Password' }).click();
+  await page.getByRole('textbox', { name: 'Password' }).fill('1234567890');
+  await page.getByRole('button', { name: 'Login' }).click();
+  await page.waitForURL('**/dashboard');
+  await page.context().storageState({ path: 'auth.json' });
 
-  // Dashboard navigation
-  await page.goto('https://app.novacrm.ca/dashboard');
-   await page.getByRole('link', { name: 'View History', exact: true }).click();
-  await page.locator('div').filter({ hasText: /^Settings$/ }).getByRole('img').click();
-  await page.getByRole('link', { name: 'New Leads 0 View All' }).getByRole('link').click();
-  await page.getByRole('link', { name: 'Home' }).click();
-  await page.getByRole('link', { name: 'Today\'s Task 0 View All' }).getByRole('link').click();
-  await page.getByRole('link', { name: 'Home' }).click();
-  await page.getByRole('link', { name: 'Incomplete Follow Ups 408' }).getByRole('link').click();
-  await page.getByRole('link', { name: 'Home' }).click();
-  await page.locator('.Homepage_slide__x897u').first().click();
-  await page.getByRole('link', { name: 'Home' }).click();
-  await page.locator('div').filter({ hasText: /^Social MediaView More$/ }).getByRole('link').click();
-  await page.getByRole('link', { name: 'Home' }).click();
-  await page.locator('div').filter({ hasText: /^Email MarketingView More$/ }).getByRole('link').click();
-  await page.goto('https://app.novacrm.ca/dashboard');
-  const page2Promise = page.waitForEvent('popup');
-  await page.getByRole('button', { name: 'Getting Started' }).click();
-  const page2 = await page2Promise;
-  await page.getByRole('link', { name: 'View All Automation' }).click();
-  await page.locator('i').nth(3).click();
-  await page.locator('div').filter({ hasText: /^View More$/ }).getByRole('link').click();
-  await page.goto('https://app.novacrm.ca/dashboard');
+  //1 Logo Visible 
+  await expect(page.locator('img[alt="Nova CRM Logo"]')).toBeVisible();
 
-  // View History
-//   await page.getByRole('link', { name: 'View History', exact: true }).click();
-//   await expect(page).toHaveURL('https://app.novacrm.ca/profile#credit-history');
-//   await page.goto('https://app.novacrm.ca/dashboard');
+  //2. Redirects to Credit History
+  await page.getByRole('link', { name: 'View History', exact: true }).click();
+  await page.goto('https://v2.novacrm.ca/dashboard');
 
-//   // New Leads
-//   await page.getByRole('link', { name: 'New Leads 0 View All' }).getByRole('link').click();
-//   await expect(page).toHaveURL('https://app.novacrm.ca/people?new_leads=true');
-//   await page.goto('https://app.novacrm.ca/dashboard');
+  //3. Redirects to New leads'
+  await page.locator('a[href="/people?new_leads=true"]').getByRole('link').click();
+  await page.goto('https://v2.novacrm.ca/dashboard');
 
-//   // Today’s Task
-//   const todayTaskCard = page.locator('div:has-text("Today\'s Task")');
-// await todayTaskCard.getByRole('link', { name: 'View All' }).click();
 
-//   await expect(page).toHaveURL('https://app.novacrm.ca/task?tab=tasks');
-//   await page.goto('https://app.novacrm.ca/dashboard');
+//4. Redirects to Todays Task
+  await page.locator('a[href="/task?tab=tasks"]').first().click();;
+  await page.goto('https://v2.novacrm.ca/dashboard');
 
-//   // Incomplete Follow Ups
-//   await page.getByRole('link', { name: 'Incomplete Follow Ups 408 View' }).getByRole('link').click();
-//   await expect(page).toHaveURL('https://app.novacrm.ca/people?incomplete_follow_up=true');
-//   await page.goto('https://app.novacrm.ca/dashboard');
 
-  // // Slide actions
-  // await page.locator('.Homepage_slide__x897u').first().click();
-  // await page.locator('.cursor-pointer').first().click();
-  // await page.goto('https://app.novacrm.ca/dashboard');
+//5. Redirects to incomplete Followups
+  await page.locator('a[href="/people?incomplete_follow_up=true"]').first().click();
+  await page.goto('https://v2.novacrm.ca/dashboard');
 
-  // // Social Media
-  // await page.locator('div').filter({ hasText: /^Social MediaIntrestingView More$/ }).getByRole('link').click();
-  // await expect(page).toHaveURL('https://app.novacrm.ca/social-media');
-  // await page.goto('https://app.novacrm.ca/dashboard');
+//6. Redirects to Marketplace'
+  await page.getByRole('link', { name: '.' }).click();
+  await page.locator('header').filter({ hasText: 'Marketplace' }).getByRole('button').click();
+  await page.goto('https://v2.novacrm.ca/dashboard');
 
-  // // Email Marketing
-  // await page.locator('div').filter({ hasText: /^Email MarketingView More$/ }).getByRole('link').click();
-  // await expect(page).toHaveURL('https://app.novacrm.ca/email-marketing');
-  // await page.goto('https://app.novacrm.ca/dashboard');
+//7. Redirects to Email Marketing Updaates
+  await page.locator('a[href="/email-marketing"]').first().click();
+  await page.goto('https://v2.novacrm.ca/dashboard');
 
-  // // Automation
-  // await page.getByRole('link', { name: 'View All Automation' }).click();
-  // await expect(page).toHaveURL('https://app.novacrm.ca/automation');
-  // await page.goto('https://app.novacrm.ca/dashboard');
+  //8. Redirects to SMM Updaates
+  await page.locator('a[href="/social-media"]').first().click();
+  await page.goto('https://v2.novacrm.ca/dashboard');
 
-  // // Getting Started (popup)
-  // const page1Promise = page.waitForEvent('popup');
-  // await page.getByRole('button', { name: 'Getting Started' }).click();
-  // const page1 = await page1Promise;
-  // await expect(page1).toHaveURL('https://support.novacrm.ca/en/');
+  //9. Automation Update
+  await page.getByText('View All Automation').first().click();
+
+  await page.goto('https://v2.novacrm.ca/dashboard');
+
+  //10. Task Update
+  await page.locator('.CalendarToolbar-module-scss-module__ARJ8uq__viewMore').first().click();
+  await page.goto('https://v2.novacrm.ca/dashboard');
+  
+  //11. Support Redirection
+  await page.getByRole('button', { name: 'Getting Started' }).first().click();
+  await page.goto('https://v2.novacrm.ca/dashboard');
+
+
 });
