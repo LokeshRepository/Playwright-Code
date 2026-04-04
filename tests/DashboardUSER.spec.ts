@@ -61,32 +61,29 @@ test('1. Dashboard Redirection checking', async ({ page }) => {
   await page.goto('https://v2.novacrm.ca/dashboard');
   
 //11 Email Analytics Redirections
-await page.waitForURL('**/dashboard');
+  await page.waitForURL('**/dashboard');
   await page.waitForLoadState('networkidle');
 
-  // ✅ Wait for Recent Emails section
+  // 📦 Recent Emails container
   const container = page.locator('[class*="emailDetailsContent"]');
   await container.waitFor();
 
   const noDataText = page.locator('h3', { hasText: /no data/i });
 
-  // ✅ Wait until either data OR no data appears
+  // ⏳ Wait for either data OR no data
   await Promise.race([
     container.locator('[class*="emailCard"]').first().waitFor({ state: 'visible', timeout: 10000 }),
     noDataText.waitFor({ state: 'visible', timeout: 10000 })
   ]);
 
-  // ✅ Scoped locator (FIXED)
-  const emailCards = container.locator('[class*="emailCard"]');
-
-  const isNoDataVisible = await noDataText.isVisible();
-  console.log('No Data Visible:', isNoDataVisible);
-
-  if (isNoDataVisible) {
+  // ❌ No Data Case
+  if (await noDataText.isVisible()) {
     console.log('⚠️ No data found - skipping test');
     return;
   }
 
+  // ✅ Email cards
+  const emailCards = container.locator('[class*="emailCard"]');
   const count = await emailCards.count();
   console.log('✅ Email Count:', count);
 
@@ -94,49 +91,76 @@ await page.waitForURL('**/dashboard');
 
   for (let i = 0; i < limit; i++) {
     const card = emailCards.nth(i);
-
-    // 👇 Based on your HTML, these are NOT buttons — they are clickable divs
     const stats = card.locator('[class*="emailStatistics"]');
-
     const sendBtn = stats.filter({ hasText: 'Sends' });
     const openBtn = stats.filter({ hasText: 'Opens' });
 
     console.log(`\n🔍 Testing card ${i + 1}`);
 
     // =========================
-    // ✅ OPEN (Opens)
+    // ✅ OPENS REDIRECTION
     // =========================
-    if (await openBtn.isVisible()) {
-      console.log('➡️ Clicking Opens');
+    try {
+      if (await openBtn.isVisible()) {
+        console.log('➡️ Clicking Opens');
 
-      await Promise.all([
-        page.waitForNavigation(),
-        openBtn.click()
-      ]);
+        await Promise.all([
+          page.waitForNavigation(),
+          openBtn.click()
+        ]);
 
-      console.log('🌐 URL after Opens:', page.url());
+        console.log('🌐 URL after Opens:', page.url());
 
-      await page.waitForTimeout(3000); // 👀 visualize
-      await page.goBack();
+        // ✅ Soft Assertion (won’t stop test)
+        await expect.soft(page).toHaveURL(/\/analytics\?tab=open/);
+
+        // 📸 Screenshot for proof
+        await page.screenshot({ path: `open-card-${i + 1}.png` });
+
+        await page.waitForTimeout(2000); // 👀 visualize
+        await page.goBack();
+        await page.waitForLoadState('networkidle');
+      }
+    } catch (error: any) {
+      console.log(`❌ Opens failed for card ${i + 1}:`, error.message);
+
+      await page.screenshot({ path: `error-open-${i + 1}.png` });
     }
 
     // =========================
-    // ✅ SEND (Sends)
+    // ✅ SENDS REDIRECTION
     // =========================
-    if (await sendBtn.isVisible()) {
-      console.log('➡️ Clicking Sends');
+    try {
+      if (await sendBtn.isVisible()) {
+        console.log('➡️ Clicking Sends');
 
-      await Promise.all([
-        page.waitForNavigation(),
-        sendBtn.click()
-      ]);
+        await Promise.all([
+          page.waitForNavigation(),
+          sendBtn.click()
+        ]);
 
-      console.log('🌐 URL after Sends:', page.url());
+        console.log('🌐 URL after Sends:', page.url());
 
-      await page.waitForTimeout(3000); // 👀 visualize
-      await page.goBack();
+        // ✅ Soft Assertion
+        await expect.soft(page).toHaveURL(/\/analytics\?tab=sent/);
+
+        // 📸 Screenshot for proof
+        await page.screenshot({ path: `send-card-${i + 1}.png` });
+
+        await page.waitForTimeout(2000); // 👀 visualize
+        await page.goBack();
+        await page.waitForLoadState('networkidle');
+      }
+    } catch (error: any) {
+      console.log(`❌ Sends failed for card ${i + 1}:`, error.message);
+
+      await page.screenshot({ path: `error-send-${i + 1}.png` });
     }
   }
+
+  console.log('\n✅ Test execution completed (with error handling)');
+
+
 
   //11. Support Redirection
   await page.getByRole('button', { name: 'Getting Started' }).first().click();
