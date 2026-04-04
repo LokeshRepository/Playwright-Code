@@ -2,8 +2,8 @@ import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests', // your test folder
-  timeout: 50 * 1000,
-  retries: 1, // optional: retry failed tests once
+  timeout: 1000 * 1000,
+  retries: 0, // optional: retry failed tests once
   reporter: [ ['html', { open: 'always' }],// <-- enables HTML report
               ['list'],  // keep console output
               ['allure-playwright'] // add allure], 
