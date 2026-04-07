@@ -9,102 +9,60 @@ test('Dashboard Redirection checking (Robust)', async ({ page }) => {
   await page.getByRole('button', { name: 'Login' }).click();
 
   await page.waitForURL('**/dashboard');
-  await page.waitForLoadState('networkidle');
+    const searchData = [
+    'lokesh',
+    'lokesh@gmail.com',
+    '9876543210',
+    'john',
+    'test@yahoo.com'
+  ];
 
-  // 📦 Recent Emails container
-  const container = page.locator('[class*="emailDetailsContent"]');
-  await container.waitFor();
+  const searchBox = page.getByPlaceholder(
+    'Search by Lead Name, Email, or Contact Number'
+  );
 
-  const noDataText = page.locator('h3', { hasText: /no data/i });
+  const results = page.locator('[data-slot="command-item"]');
+  const noData = page.locator('[data-slot="command-empty"]');
 
-  // ⏳ Wait for either data OR no data
-  await Promise.race([
-    container.locator('[class*="emailCard"]').first().waitFor({ state: 'visible', timeout: 10000 }),
-    noDataText.waitFor({ state: 'visible', timeout: 10000 })
-  ]);
+  for (const searchText of searchData) {
 
-  // ❌ No Data Case
-  if (await noDataText.isVisible()) {
-    console.log('⚠️ No data found - skipping test');
-    return;
-  }
+    console.log(`\nSearching for: ${searchText}`);
 
-  // ✅ Email cards
-  const emailCards = container.locator('[class*="emailCard"]');
-  const count = await emailCards.count();
-  console.log('✅ Email Count:', count);
+    // clear and search
+    await searchBox.fill('');
+    await searchBox.fill(searchText);
+await page.waitForTimeout(2000);
+    // wait for result OR no data
+    await Promise.race([
+      results.first().waitFor({ state: 'visible' }).catch(() => {}),
+      noData.waitFor({ state: 'visible' }).catch(() => {})
+    ]);
 
-  const limit = Math.min(count, 3);
-
-  for (let i = 0; i < limit; i++) {
-    const card = emailCards.nth(i);
-
-    const stats = card.locator('[class*="emailStatistics"]');
-    const sendBtn = stats.filter({ hasText: 'Sends' });
-    const openBtn = stats.filter({ hasText: 'Opens' });
-
-    console.log(`\n🔍 Testing card ${i + 1}`);
-
-    // =========================
-    // ✅ OPENS REDIRECTION
-    // =========================
-    try {
-      if (await openBtn.isVisible()) {
-        console.log('➡️ Clicking Opens');
-
-        await Promise.all([
-          page.waitForNavigation(),
-          openBtn.click()
-        ]);
-
-        console.log('🌐 URL after Opens:', page.url());
-
-        // ✅ Soft Assertion (won’t stop test)
-        await expect.soft(page).toHaveURL(/\/analytics\?tab=open/);
-
-        // 📸 Screenshot for proof
-        await page.screenshot({ path: `open-card-${i + 1}.png` });
-
-        await page.waitForTimeout(2000); // 👀 visualize
-        await page.goBack();
-        await page.waitForLoadState('networkidle');
-      }
-    } catch (error: any) {
-      console.log(`❌ Opens failed for card ${i + 1}:`, error.message);
-
-      await page.screenshot({ path: `error-open-${i + 1}.png` });
+    // CASE 1 — No results
+    if (await noData.isVisible()) {
+      await expect(noData).toContainText('No people found');
+      console.log('No results found');
     }
 
-    // =========================
-    // ✅ SENDS REDIRECTION
-    // =========================
-    try {
-      if (await sendBtn.isVisible()) {
-        console.log('➡️ Clicking Sends');
+    // CASE 2 — Results found
+    else {
+      const count = await results.count();
+      console.log('Total results:', count);
 
-        await Promise.all([
-          page.waitForNavigation(),
-          sendBtn.click()
-        ]);
+      const verifyCount = Math.min(count, 3);
 
-        console.log('🌐 URL after Sends:', page.url());
+      for (let i = 0; i < verifyCount; i++) {
+        const item = results.nth(i);
 
-        // ✅ Soft Assertion
-        await expect.soft(page).toHaveURL(/\/analytics\?tab=sent/);
+        await expect(item).toBeVisible();
 
-        // 📸 Screenshot for proof
-        await page.screenshot({ path: `send-card-${i + 1}.png` });
+        const text = await item.textContent();
+        console.log(`Result ${i + 1}:`, text);
 
-        await page.waitForTimeout(2000); // 👀 visualize
-        await page.goBack();
-        await page.waitForLoadState('networkidle');
+        await expect(item).toContainText(
+          new RegExp(searchText, 'i')
+        );
       }
-    } catch (error: any) {
-      console.log(`❌ Sends failed for card ${i + 1}:`, error.message);
-
-      await page.screenshot({ path: `error-send-${i + 1}.png` });
     }
   }
-
-  console.log('\n✅ Test execution completed (with error handling)');
 });

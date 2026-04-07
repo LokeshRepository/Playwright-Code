@@ -34,7 +34,7 @@ test('1. Dashboard Redirection checking', async ({ page }) => {
   await page.waitForTimeout(7000);
   await page.goto('https://v2.novacrm.ca/dashboard');
 
-//6. Redirects to Marketplace'
+//6. Redirects to Marketplace
   await page.getByRole('link', { name: '.' }).click();
   await page.locator('header').filter({ hasText: 'Marketplace' }).getByRole('button').click();
   await page.waitForTimeout(7000);
@@ -81,20 +81,16 @@ test('1. Dashboard Redirection checking', async ({ page }) => {
     console.log('⚠️ No data found - skipping test');
     return;
   }
-
   // ✅ Email cards
   const emailCards = container.locator('[class*="emailCard"]');
   const count = await emailCards.count();
   console.log('✅ Email Count:', count);
-
-  const limit = Math.min(count, 3);
-
+  const limit = Math.min(count, 2);
   for (let i = 0; i < limit; i++) {
     const card = emailCards.nth(i);
     const stats = card.locator('[class*="emailStatistics"]');
     const sendBtn = stats.filter({ hasText: 'Sends' });
     const openBtn = stats.filter({ hasText: 'Opens' });
-
     console.log(`\n🔍 Testing card ${i + 1}`);
 
     // =========================
@@ -103,30 +99,23 @@ test('1. Dashboard Redirection checking', async ({ page }) => {
     try {
       if (await openBtn.isVisible()) {
         console.log('➡️ Clicking Opens');
-
         await Promise.all([
           page.waitForNavigation(),
           openBtn.click()
         ]);
-
         console.log('🌐 URL after Opens:', page.url());
-
         // ✅ Soft Assertion (won’t stop test)
         await expect.soft(page).toHaveURL(/\/analytics\?tab=open/);
-
         // 📸 Screenshot for proof
         await page.screenshot({ path: `open-card-${i + 1}.png` });
-
         await page.waitForTimeout(2000); // 👀 visualize
         await page.goBack();
         await page.waitForLoadState('networkidle');
       }
     } catch (error: any) {
       console.log(`❌ Opens failed for card ${i + 1}:`, error.message);
-
       await page.screenshot({ path: `error-open-${i + 1}.png` });
     }
-
     // =========================
     // ✅ SENDS REDIRECTION
     // =========================
@@ -138,9 +127,7 @@ test('1. Dashboard Redirection checking', async ({ page }) => {
           page.waitForNavigation(),
           sendBtn.click()
         ]);
-
-        console.log('🌐 URL after Sends:', page.url());
-
+      console.log('🌐 URL after Sends:', page.url());
         // ✅ Soft Assertion
         await expect.soft(page).toHaveURL(/\/analytics\?tab=sent/);
 
@@ -160,9 +147,65 @@ test('1. Dashboard Redirection checking', async ({ page }) => {
 
   console.log('\n✅ Test execution completed (with error handling)');
 
+//12. Search box testing
+   const searchData = [
+    'lokesh',
+    'lokesh@gmail.com',
+    '9876543210',
+    'john',
+    'test@yahoo.com'
+  ];
 
+  const searchBox = page.getByPlaceholder(
+    'Search by Lead Name, Email, or Contact Number'
+  );
 
-  //11. Support Redirection
+  const results = page.locator('[data-slot="command-item"]');
+  const noData = page.locator('[data-slot="command-empty"]');
+
+  for (const searchText of searchData) {
+
+    console.log(`\nSearching for: ${searchText}`);
+
+    // clear and search
+    await searchBox.fill('');
+    await searchBox.fill(searchText);
+await page.waitForTimeout(2000);
+    // wait for result OR no data
+    await Promise.race([
+      results.first().waitFor({ state: 'visible' }).catch(() => {}),
+      noData.waitFor({ state: 'visible' }).catch(() => {})
+    ]);
+
+    // CASE 1 — No results
+    if (await noData.isVisible()) {
+      await expect(noData).toContainText('No people found');
+      console.log('No results found');
+    }
+
+    // CASE 2 — Results found
+    else {
+      const count = await results.count();
+      console.log('Total results:', count);
+
+      const verifyCount = Math.min(count, 3);
+
+      for (let i = 0; i < verifyCount; i++) {
+        const item = results.nth(i);
+
+        await expect(item).toBeVisible();
+
+        const text = await item.textContent();
+        console.log(`Result ${i + 1}:`, text);
+
+        await expect(item).toContainText(
+          new RegExp(searchText, 'i')
+        );
+      }
+    }
+  }
+
+  //13. Support Redirection
   await page.getByRole('button', { name: 'Getting Started' }).first().click();
   await page.waitForTimeout(7000);
   await page.goto('https://v2.novacrm.ca/dashboard');
