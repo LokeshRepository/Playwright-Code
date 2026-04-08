@@ -15,6 +15,7 @@ test('1. Dashboard Redirection checking', async ({ page }) => {
   //2. Redirects to Credit History
   await page.getByRole('link', { name: 'View History', exact: true }).click();
   await page.waitForTimeout(7000);
+  
   await page.goto('https://v2.novacrm.ca/dashboard');
 
   //3. Redirects to New leads'
@@ -59,7 +60,12 @@ test('1. Dashboard Redirection checking', async ({ page }) => {
   await page.locator('.CalendarToolbar-module-scss-module__ARJ8uq__viewMore').first().click();
   await page.waitForTimeout(7000);
   await page.goto('https://v2.novacrm.ca/dashboard');
-  
+//11. Cart Redirection
+  await page.locator('button.GoToCartBottomNavButton-module__-vuNVq__container').click();
+  await page.waitForTimeout(2000);
+  // verify redirected URL
+  await expect(page).toHaveURL(/\/payment\/cart/);
+  await page.goto('https://v2.novacrm.ca/dashboard');
 //11 Email Analytics Redirections
   await page.waitForURL('**/dashboard');
   await page.waitForLoadState('networkidle');
