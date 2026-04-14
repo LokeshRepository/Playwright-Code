@@ -29,5 +29,112 @@ await page.locator('span:has-text("Phone:")')
   .locator('xpath=ancestor::div[1]')
   .locator('button')
   .click();
-  await page.waitForTimeout(7000);
+  await page.waitForTimeout(1000);
+ 
+  
+   await page.getByRole('button', { name: 'Add another phone number' }).click();
+
+await page.locator('select').nth(1).selectOption('+91');
+
+await page.locator('input[name="phones.1.value"]').fill('9930010209');
+
+await page.getByRole('button', { name: 'Save' }).click();
+  await page.locator('div').filter({ hasText: /^Phone:\+918421020309Default\+919930010209$/ }).getByRole('button').click();
+  await page.locator('form').getByRole('button').nth(1).click();
+  await page.getByRole('button', { name: 'Save' }).click();
+
+
+
+  await page.locator('div').filter({ hasText: /^Email:Lokesh@mmnovatech\.comDefault$/ }).getByRole('button').click();
+  await page.getByRole('button', { name: 'Add another email' }).click();
+  await page.locator('input[name="emails.1.value"]').click();
+  await page.locator('input[name="emails.1.value"]').fill('Lokesh+1@mmnovatech.com');
+  await page.getByRole('button', { name: 'Save' }).click();
+  await page.locator('div').filter({ hasText: /^Email:Lokesh@mmnovatech\.comDefaultLokesh\+1@mmnovatech\.com$/ }).getByRole('button').click();
+  await page.locator('form').getByRole('button').nth(1).click();
+  await page.getByRole('button', { name: 'Save' }).click();
+
+
+  await page.locator('.lucide.lucide-pencil').getByRole('button').nth(3).click();
+  await page.locator('#source').click();
+
+
+  await page.locator('.lucide.lucide-pencil').getByRole('button').nth(4).click();
+  await page.getByRole('button', { name: 'Save' }).click();
+  await page.locator('div').filter({ hasText: /^Lead Type:Landlord$/ }).getByRole('button').click();
+  await page.locator('#leadType').click();
+  await page.getByLabel('Homeowner').getByText('Homeowner').click();
+  await page.getByRole('button', { name: 'Save' }).click();
+
+
+   await page.locator('.lucide.lucide-pencil').getByRole('button').nth(5).click();
+  await page.getByRole('textbox', { name: 'Please enter address' }).click();
+  await page.getByRole('textbox', { name: 'Please enter address' }).press('ControlOrMeta+a');
+  await page.getByRole('textbox', { name: 'Please enter address' }).fill('canada');
+  await page.getByText('Canada Water').click();
+  await page.getByRole('button', { name: 'Save' }).click();
+
+
+   await page.locator('.lucide.lucide-pencil').getByRole('button').nth(6).click();
+  await page.getByRole('combobox').click();
+  await page.getByLabel('Sahil Akbari').getByText('Sahil Akbari').click();
+  await page.getByRole('button', { name: 'Save' }).click();
+
+
+
+  // await page.locator('div').filter({ hasText: /^City:N\/A$/ }).getByRole('button').click();
+  // await page.getByRole('textbox', { name: 'Enter City' }).click();
+  // await page.getByRole('textbox', { name: 'Enter City' }).fill('jalagaon');
+  // await page.getByRole('button', { name: 'Save' }).click();
+  // await page.locator('div').filter({ hasText: /^Postal Code:N\/A$/ }).getByRole('button').click();
+  // await page.getByRole('textbox', { name: 'Enter Postal Code' }).click();
+  // await page.getByRole('textbox', { name: 'Enter Postal Code' }).fill('425116');
+  // await page.getByRole('button', { name: 'Save' }).click();
+  // await page.locator('div').filter({ hasText: /^Avg Property Price:N\/A$/ }).getByRole('button').click();
+  // await page.getByRole('textbox', { name: 'Enter Avg Property Price' }).click();
+  // await page.getByRole('textbox', { name: 'Enter Avg Property Price' }).fill('20000$');
+  // await page.getByRole('button', { name: 'Save' }).click();
+  // await page.locator('div').filter({ hasText: /^Buy Area:N\/A$/ }).getByRole('button').click();
+  // await page.getByRole('textbox', { name: 'Enter Buy Area' }).click();
+  // await page.getByRole('textbox', { name: 'Enter Buy Area' }).fill('Toronto');
+  // await page.getByRole('button', { name: 'Save' }).click();
+  // await page.locator('div').filter({ hasText: /^Home Type:N\/A$/ }).getByRole('button').click();
+  // await page.getByRole('textbox', { name: 'Enter Home Type' }).click();
+  // await page.getByRole('textbox', { name: 'Enter Home Type' }).fill('Condo');
+  // await page.getByRole('button', { name: 'Save' }).click();
+  // await page.locator('div').filter({ hasText: /^Start Date:N\/A$/ }).getByRole('button').click();
+  // await page.getByRole('button', { name: 'Select Start Date' }).click();
+  // await page.getByRole('button', { name: 'Wednesday, April 1st,' }).click();
+  // await page.getByRole('button', { name: 'Save' }).click();
+  // await page.locator('div').filter({ hasText: /^Last Contact Date:N\/A$/ }).getByRole('button').click();
+  // await page.getByRole('button', { name: 'Enter Last Contact Date' }).click();
+  // await page.getByRole('button', { name: 'Thursday, April 2nd,' }).click();
+  // await page.getByRole('button', { name: 'Save' }).click();
+  // await page.locator('div').filter({ hasText: /^Province:N\/A$/ }).getByRole('button').click();
+  // await page.getByRole('textbox', { name: 'Enter Province' }).click();
+  // await page.getByRole('textbox', { name: 'Enter Province' }).fill('Brampton');
+  // await page.getByRole('button', { name: 'Save' }).click();
+  // await page.locator('div').filter({ hasText: /^Timeframe:N\/A$/ }).getByRole('button').click();
+  // await page.getByRole('textbox', { name: 'Enter Timeframe' }).click();
+  // await page.getByRole('textbox', { name: 'Enter Timeframe' }).fill('2 months');
+  // await page.getByRole('button', { name: 'Save' }).click();
+  // await page.locator('div').filter({ hasText: /^Urgency:N\/A$/ }).getByRole('button').click();
+  // await page.getByRole('textbox', { name: 'Enter Urgency' }).click();
+  // await page.getByRole('textbox', { name: 'Enter Urgency' }).fill('Hogh');
+  // await page.getByRole('textbox', { name: 'Enter Urgency' }).press('ArrowLeft');
+  // await page.getByRole('textbox', { name: 'Enter Urgency' }).press('ArrowLeft');
+  // await page.getByRole('textbox', { name: 'Enter Urgency' }).press('ArrowLeft');
+  // await page.getByRole('textbox', { name: 'Enter Urgency' }).press('ArrowRight');
+  // await page.getByRole('textbox', { name: 'Enter Urgency' }).fill('High');
+  // await page.getByRole('button', { name: 'Save' }).click();
+  // await page.locator('div').filter({ hasText: /^Birthday:N\/A$/ }).getByRole('button').click();
+  // await page.getByRole('button', { name: 'Enter Birthday' }).click();
+  // await page.getByRole('button', { name: '1995' }).click();
+  // await page.getByRole('button', { name: 'Jun' }).click();
+  // await page.getByRole('button', { name: 'Wednesday, June 7th,' }).click();
+  // await page.getByRole('button', { name: 'Save' }).click();
+  // await page.locator('div').filter({ hasText: /^Anniversary:N\/A$/ }).getByRole('button').click();
+  // await page.getByRole('button', { name: 'Enter Anniversary' }).click();
+  // await page.getByRole('button', { name: 'Tuesday, April 7th,' }).click();
+  // await page.getByRole('button', { name: 'Save' }).click();
 });

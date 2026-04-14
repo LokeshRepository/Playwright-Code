@@ -1,16 +1,30 @@
 import { test, expect } from '@playwright/test';
 
-test('Dashboard Redirection checking (Robust)', async ({ page }) => {
+test('1. Dashboard Redirection checking', async ({ page }) => {
   await page.goto('https://app.novacrm.ca/');
-
-  // 🔐 Login
+  await page.getByRole('textbox', { name: 'Email' }).click();
   await page.getByRole('textbox', { name: 'Email' }).fill('lokesh@mmnovatech.com');
+  await page.getByRole('textbox', { name: 'Password' }).click();
   await page.getByRole('textbox', { name: 'Password' }).fill('1234567890');
   await page.getByRole('button', { name: 'Login' }).click();
-
   await page.waitForURL('**/dashboard');
-   await page.locator('button.GoToCartBottomNavButton-module__-vuNVq__container').click();
-await page.waitForTimeout(2000);
-  // verify redirected URL
-  await expect(page).toHaveURL(/\/payment\/cart/);
+  await page.context().storageState({ path: 'auth.json' });
+  await page.goto('https://v2.novacrm.ca/people');
+                                                        //Step 1: Search for perticular lead
+  await page.waitForURL('**/people');
+  await page.locator('tbody').waitFor();
+  // find correct row using email + phone
+   await page.locator('tbody').waitFor();
+                                                              // find row using email
+  const TestData = page.locator('tbody tr', {
+    has: page.getByText('lokesh@mmnovatech.com')
+  });
+  await expect(TestData).toBeVisible();                                           
+  await TestData.locator('.text-sky-600').first().click(); // click first name (Lokesh)
+                                                    
+await page.locator('.lucide.lucide-pencil').getByRole('button').nth(5).click();
+  await page.getByRole('textbox', { name: 'Please enter address' }).click();
+  await page.getByRole('textbox', { name: 'Please enter address' }).fill('canada');
+  await page.getByText('Canada Water').click();
+  await page.getByRole('button', { name: 'Save' }).click();
 });
