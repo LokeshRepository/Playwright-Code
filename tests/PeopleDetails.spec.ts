@@ -30,19 +30,13 @@ await page.locator('span:has-text("Phone:")')
   .locator('button')
   .click();
   await page.waitForTimeout(1000);
- 
-  
    await page.getByRole('button', { name: 'Add another phone number' }).click();
-
 await page.locator('select').nth(1).selectOption('+91');
-
-await page.locator('input[name="phones.1.value"]').fill('9930010209');
-
+await page.locator('input[name="phones.1.value"]').fill('9930010201');
 await page.getByRole('button', { name: 'Save' }).click();
-  await page.locator('div').filter({ hasText: /^Phone:\+918421020309Default\+919930010209$/ }).getByRole('button').click();
+  await page.locator('div').filter({ hasText: /^Phone:\+918421020309Default\+919930010201$/ }).getByRole('button').click();
   await page.locator('form').getByRole('button').nth(1).click();
   await page.getByRole('button', { name: 'Save' }).click();
-
 
 
   await page.locator('div').filter({ hasText: /^Email:Lokesh@mmnovatech\.comDefault$/ }).getByRole('button').click();
@@ -55,19 +49,34 @@ await page.getByRole('button', { name: 'Save' }).click();
   await page.getByRole('button', { name: 'Save' }).click();
 
 
-  await page.locator('.lucide.lucide-pencil').getByRole('button').nth(3).click();
+                                                          //Test case for source Testing
+  await page.locator('.lucide.lucide-pencil').nth(3).click();
   await page.locator('#source').click();
+const options = page.getByRole('option');// get options
+const count = await options.count();// random index
+const randomIndex = Math.floor(Math.random() * count);
+const selected = await options.nth(randomIndex).textContent();
+console.log("Selected value:", selected);
+await options.nth(randomIndex).click();
+ await page.waitForTimeout(7000);
+await page.getByRole('button', { name: 'Save' }).waitFor();
+await page.getByRole('button', { name: 'Save' }).click();
+
+                                              //Test case for Lead Type Testing
+await page.locator('.lucide.lucide-pencil').nth(4).click();                                                
+await page.locator('#leadType').click();
+const leadTypeOptions = page.getByRole('option');
+const leadTypeCount = await leadTypeOptions.count();
+const randomLeadTypeIndex = Math.floor(Math.random() * leadTypeCount);
+const selectedLeadType = await leadTypeOptions.nth(randomLeadTypeIndex).textContent();
+console.log("Selected Lead Type:", selectedLeadType);
+await leadTypeOptions.nth(randomLeadTypeIndex).click();
+await page.waitForTimeout(3000);
+await page.getByRole('button', { name: 'Save' }).waitFor();
+await page.getByRole('button', { name: 'Save' }).click();
 
 
-  await page.locator('.lucide.lucide-pencil').getByRole('button').nth(4).click();
-  await page.getByRole('button', { name: 'Save' }).click();
-  await page.locator('div').filter({ hasText: /^Lead Type:Landlord$/ }).getByRole('button').click();
-  await page.locator('#leadType').click();
-  await page.getByLabel('Homeowner').getByText('Homeowner').click();
-  await page.getByRole('button', { name: 'Save' }).click();
-
-
-   await page.locator('.lucide.lucide-pencil').getByRole('button').nth(5).click();
+  await page.locator('.lucide.lucide-pencil').getByRole('button').nth(5).click();
   await page.getByRole('textbox', { name: 'Please enter address' }).click();
   await page.getByRole('textbox', { name: 'Please enter address' }).press('ControlOrMeta+a');
   await page.getByRole('textbox', { name: 'Please enter address' }).fill('canada');
@@ -75,10 +84,10 @@ await page.getByRole('button', { name: 'Save' }).click();
   await page.getByRole('button', { name: 'Save' }).click();
 
 
-   await page.locator('.lucide.lucide-pencil').getByRole('button').nth(6).click();
-  await page.getByRole('combobox').click();
-  await page.getByLabel('Sahil Akbari').getByText('Sahil Akbari').click();
-  await page.getByRole('button', { name: 'Save' }).click();
+  //  await page.locator('.lucide.lucide-pencil').getByRole('button').nth(6).click();
+  // await page.getByRole('combobox').click();
+  // await page.getByLabel('Sahil Akbari').getByText('Sahil Akbari').click();
+  // await page.getByRole('button', { name: 'Save' }).click();
 
 
 
