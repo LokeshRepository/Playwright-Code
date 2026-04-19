@@ -23,62 +23,31 @@ test('1. Dashboard Redirection checking', async ({ page }) => {
   // click first name (Lokesh)
   await TestData.locator('.text-sky-600').first().click();
   await page.waitForTimeout(7000);
-//Test Case for Address
-await page.locator('.lucide.lucide-pencil').nth(5).click();
-  await page.keyboard.press('ControlOrMeta+A');
-await page.keyboard.press('Backspace');
-// type like real user
-const input = page.locator('#googleSearch');
-
-await input.click();
-
-// remove everything including spaces
-await input.press('ControlOrMeta+A');
-await input.press('Backspace');
-
-// type (not fill)
-await input.type('canada', { delay: 80 });
-  // wait for dropdown to appear
-  await page.waitForTimeout(3000);
-  await page.locator('.pac-item').first().waitFor();
-  // get all options
-  const options1 = page.locator('.pac-item');
-  // count
-  const count1 = await options1.count();
-  // pick random
-  const randomIndex1 = Math.floor(Math.random() * count1);
-  console.log('Selected count:',count1 );
-  // get text
-  const selectedAddress = await options1.nth(randomIndex1).innerText();
-  console.log('Selected Address:', selectedAddress);
-  // click random option
-  await options1.nth(randomIndex1).click();
-  await page.waitForTimeout(3000);
+   
+  await page.locator('.lucide.lucide-pencil').nth(7).click();
+  await page.getByRole('textbox', { name: 'Enter City' }).click();
+  await page.getByRole('textbox', { name: 'Enter City' }).fill('Ontario');
   await page.getByRole('button', { name: 'Save' }).click();
-  // await page.locator('.lucide.lucide-pencil').nth(5).click();
-  // await page.getByRole('textbox', { name: 'Please enter address' }).click();
-  // await page.fill('#googleSearch', 'canada');
-
-  // // wait for dropdown to appear
-  // await page.locator('.pac-item').first().waitFor();
-
-  // // get all options
-  // const options = page.locator('.pac-item');
-
-  // // count
-  // const count = await options.count();
-
-  // // pick random
-  // const randomIndex = Math.floor(Math.random() * count);
-
-  // // get text
-  // const selectedAddress = await options.nth(randomIndex).innerText();
-
-  // console.log('Selected Address:', selectedAddress);
-
-  // // click random option
-  // await options.nth(randomIndex).click();
-  // await page.waitForTimeout(7000);
-  // await page.getByRole('button', { name: 'Save' }).click();
+await page.waitForTimeout(3000);
+   await page.locator('.lucide.lucide-pencil').nth(8).click();
+  await page.getByRole('textbox', { name: 'Enter Postal Code' }).click();
+  await page.getByRole('textbox', { name: 'Enter Postal Code' }).fill('L4B3B2');
+  await page.getByRole('button', { name: 'Save' }).click();
+await page.waitForTimeout(3000);
+   await page.locator('.lucide.lucide-pencil').nth(9).click();
+  await page.getByRole('textbox', { name: 'Enter Avg Property Price' }).click();
+  await page.getByRole('textbox', { name: 'Enter Avg Property Price' }).fill('20M');
+  await page.getByRole('button', { name: 'Save' }).click();
+await page.waitForTimeout(3000);
+  await page.locator('.lucide.lucide-pencil').nth(10).click();
+  await page.getByRole('textbox', { name: 'Enter Buy Area' }).click();
+  await page.getByRole('textbox', { name: 'Enter Buy Area' }).fill('Brampton');
+  await page.getByRole('button', { name: 'Save' }).click();
+await page.waitForTimeout(3000);
+ await page.locator('.lucide.lucide-pencil').nth(11).click();
+  await page.getByRole('textbox', { name: 'Enter Home Type' }).click();
+  await page.getByRole('textbox', { name: 'Enter Home Type' }).fill('Codo');
+  await page.getByRole('button', { name: 'Save' }).click();
+await page.waitForTimeout(3000);
 
 });

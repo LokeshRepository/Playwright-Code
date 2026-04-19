@@ -91,17 +91,14 @@ await page.getByRole('button', { name: 'Save' }).click();
 
                                                       //Test Case for Address
 await page.locator('.lucide.lucide-pencil').nth(5).click();
-  await page.keyboard.press('ControlOrMeta+A');
-await page.keyboard.press('Backspace');
+//   await page.keyboard.press('ControlOrMeta+A');
+// await page.keyboard.press('Backspace');
 // type like real user
 const input = page.locator('#googleSearch');
-
 await input.click();
-
 // remove everything including spaces
 await input.press('ControlOrMeta+A');
 await input.press('Backspace');
-
 // type (not fill)
 await input.type('canada', { delay: 80 });
   // wait for dropdown to appear
@@ -122,16 +119,19 @@ await input.type('canada', { delay: 80 });
   await page.waitForTimeout(3000);
   await page.getByRole('button', { name: 'Save' }).click();
 
+//Test case for Assign Agent to team member 
+  await page.locator('.lucide.lucide-pencil').nth(6).click();
+  await page.getByRole('combobox').click();
+  await page.getByLabel('Sahil Akbari').getByText('Sahil Akbari').click();
+  await page.getByRole('button', { name: 'Save' }).click();
+
 
 //Delete This Lead
   await page.getByRole('button', { name: 'Delete lead' }).click();
   await page.getByRole('button', { name: 'Yes' }).click();
   await page.getByRole('button', { name: 'Yes, Confirm' }).click();
 
-  //  await page.locator('.lucide.lucide-pencil').getByRole('button').nth(6).click();
-  // await page.getByRole('combobox').click();
-  // await page.getByLabel('Sahil Akbari').getByText('Sahil Akbari').click();
-  // await page.getByRole('button', { name: 'Save' }).click();
+
 
 
 
