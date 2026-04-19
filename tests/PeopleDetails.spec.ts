@@ -10,6 +10,20 @@ test('1. Dashboard Redirection checking', async ({ page }) => {
   await page.waitForURL('**/dashboard');
   await page.context().storageState({ path: 'auth.json' });
   await page.goto('https://v2.novacrm.ca/people');
+//Step 1: Create Lead
+await page.locator('button:nth-child(4)').click();
+  await page.getByRole('textbox', { name: 'First name *' }).click();
+  await page.getByRole('textbox', { name: 'First name *' }).fill('Lokesh');
+  await page.getByRole('textbox', { name: 'Last name' }).click();
+  await page.getByRole('textbox', { name: 'Last name' }).fill('Joshi');
+  await page.getByRole('textbox', { name: 'Email Address' }).click();
+  await page.getByRole('textbox', { name: 'Email Address' }).fill('Lokesh@mmnovatech.com');
+  await page.getByRole('combobox').filter({ hasText: '+' }).click();
+  await page.getByRole('option', { name: '+91' }).click();
+  await page.getByRole('textbox', { name: 'Phone No.' }).click();
+  await page.getByRole('textbox', { name: 'Phone No.' }).fill('8421020309');
+  await page.getByRole('button', { name: 'Save Lead' }).click();
+
 //Step 1: Search for perticular lead
   await page.waitForURL('**/people');
   await page.locator('tbody').waitFor();
@@ -58,7 +72,7 @@ const randomIndex = Math.floor(Math.random() * count);
 const selected = await options.nth(randomIndex).textContent();
 console.log("Selected value:", selected);
 await options.nth(randomIndex).click();
- await page.waitForTimeout(7000);
+ await page.waitForTimeout(2000);
 await page.getByRole('button', { name: 'Save' }).waitFor();
 await page.getByRole('button', { name: 'Save' }).click();
 
@@ -71,18 +85,48 @@ const randomLeadTypeIndex = Math.floor(Math.random() * leadTypeCount);
 const selectedLeadType = await leadTypeOptions.nth(randomLeadTypeIndex).textContent();
 console.log("Selected Lead Type:", selectedLeadType);
 await leadTypeOptions.nth(randomLeadTypeIndex).click();
-await page.waitForTimeout(3000);
+await page.waitForTimeout(2000);
 await page.getByRole('button', { name: 'Save' }).waitFor();
 await page.getByRole('button', { name: 'Save' }).click();
 
+                                                      //Test Case for Address
+await page.locator('.lucide.lucide-pencil').nth(5).click();
+  await page.keyboard.press('ControlOrMeta+A');
+await page.keyboard.press('Backspace');
+// type like real user
+const input = page.locator('#googleSearch');
 
-  await page.locator('.lucide.lucide-pencil').getByRole('button').nth(5).click();
-  await page.getByRole('textbox', { name: 'Please enter address' }).click();
-  await page.getByRole('textbox', { name: 'Please enter address' }).press('ControlOrMeta+a');
-  await page.getByRole('textbox', { name: 'Please enter address' }).fill('canada');
-  await page.getByText('Canada Water').click();
+await input.click();
+
+// remove everything including spaces
+await input.press('ControlOrMeta+A');
+await input.press('Backspace');
+
+// type (not fill)
+await input.type('canada', { delay: 80 });
+  // wait for dropdown to appear
+  await page.waitForTimeout(3000);
+  await page.locator('.pac-item').first().waitFor();
+  // get all options
+  const options1 = page.locator('.pac-item');
+  // count
+  const count1 = await options1.count();
+  // pick random
+  const randomIndex1 = Math.floor(Math.random() * count1);
+  console.log('Selected count:',count1 );
+  // get text
+  const selectedAddress = await options1.nth(randomIndex1).innerText();
+  console.log('Selected Address:', selectedAddress);
+  // click random option
+  await options1.nth(randomIndex1).click();
+  await page.waitForTimeout(3000);
   await page.getByRole('button', { name: 'Save' }).click();
 
+
+//Delete This Lead
+  await page.getByRole('button', { name: 'Delete lead' }).click();
+  await page.getByRole('button', { name: 'Yes' }).click();
+  await page.getByRole('button', { name: 'Yes, Confirm' }).click();
 
   //  await page.locator('.lucide.lucide-pencil').getByRole('button').nth(6).click();
   // await page.getByRole('combobox').click();
