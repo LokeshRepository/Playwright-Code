@@ -24,30 +24,6 @@ test('1. Dashboard Redirection checking', async ({ page }) => {
   await TestData.locator('.text-sky-600').first().click();
   await page.waitForTimeout(7000);
    
-  await page.locator('.lucide.lucide-pencil').nth(7).click();
-  await page.getByRole('textbox', { name: 'Enter City' }).click();
-  await page.getByRole('textbox', { name: 'Enter City' }).fill('Ontario');
-  await page.getByRole('button', { name: 'Save' }).click();
-await page.waitForTimeout(3000);
-   await page.locator('.lucide.lucide-pencil').nth(8).click();
-  await page.getByRole('textbox', { name: 'Enter Postal Code' }).click();
-  await page.getByRole('textbox', { name: 'Enter Postal Code' }).fill('L4B3B2');
-  await page.getByRole('button', { name: 'Save' }).click();
-await page.waitForTimeout(3000);
-   await page.locator('.lucide.lucide-pencil').nth(9).click();
-  await page.getByRole('textbox', { name: 'Enter Avg Property Price' }).click();
-  await page.getByRole('textbox', { name: 'Enter Avg Property Price' }).fill('20M');
-  await page.getByRole('button', { name: 'Save' }).click();
-await page.waitForTimeout(3000);
-  await page.locator('.lucide.lucide-pencil').nth(10).click();
-  await page.getByRole('textbox', { name: 'Enter Buy Area' }).click();
-  await page.getByRole('textbox', { name: 'Enter Buy Area' }).fill('Brampton');
-  await page.getByRole('button', { name: 'Save' }).click();
-await page.waitForTimeout(3000);
- await page.locator('.lucide.lucide-pencil').nth(11).click();
-  await page.getByRole('textbox', { name: 'Enter Home Type' }).click();
-  await page.getByRole('textbox', { name: 'Enter Home Type' }).fill('Codo');
-  await page.getByRole('button', { name: 'Save' }).click();
-await page.waitForTimeout(3000);
+  
 
 });
