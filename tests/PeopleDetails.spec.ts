@@ -168,8 +168,39 @@ test('1. Dashboard Redirection checking', async ({ page }) => {
   await page.locator('[role="gridcell"]:not([aria-disabled="true"])').first().click();
   // Click Save
   await page.getByRole('button', { name: 'Save' }).click();
-                  //Test case for Assign Agent to team member 
-
+                  //Test case for Last Contact Date 
+await page.locator('.lucide.lucide-pencil').nth(13).click();
+   const calendar = page.locator('.rdp-root');
+  await calendar.waitFor();
+  // ---------------- RANDOM MONTH ----------------
+  const monthDropdown = calendar.getByRole('combobox').first();
+  await monthDropdown.click();
+  const months = page.locator('[role="option"]');
+  const monthCount = await months.count();
+  const randomMonth = Math.floor(Math.random() * monthCount);
+  const monthText = await months.nth(randomMonth).innerText();
+  await months.nth(randomMonth).click();
+  // ---------------- RANDOM YEAR ----------------
+  const yearDropdown = calendar.getByRole('combobox').nth(1);
+  await yearDropdown.click();
+  const years = page.locator('[role="option"]');
+  const yearCount = await years.count();
+  const randomYear = Math.floor(Math.random() * yearCount);
+  const yearText = await years.nth(randomYear).innerText();
+  await years.nth(randomYear).click();
+  // ---------------- RANDOM DATE ----------------
+  const dates = calendar.locator('.rdp-day:not(.rdp-day_disabled)');
+  const dateCount = await dates.count();
+  const randomDate = Math.floor(Math.random() * dateCount);
+  const dateText = await dates.nth(randomDate).innerText();
+  await dates.nth(randomDate).click();
+  // ---------------- PRINT SELECTED DATE ----------------
+  console.log(`Selected Date for Last Contact Date: ${dateText} ${monthText} ${yearText}`);
+  // ---------------- CLICK SAVE ----------------
+  const saveBtn = page.getByRole('button', { name: 'Save' });
+  await expect(saveBtn).toBeEnabled();
+  await saveBtn.click();
+ 
 
 //Delete This Lead
   await page.getByRole('button', { name: 'Delete lead' }).click();
