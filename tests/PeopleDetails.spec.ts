@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test('1. Dashboard Redirection checking', async ({ page }) => {
   await page.goto('https://app.novacrm.ca/');
   await page.getByRole('textbox', { name: 'Email' }).click();
-  await page.getByRole('textbox', { name: 'Email' }).fill('lokesh@mmnovatech.com');
+  await page.getByRole('textbox', { name: 'Email' }).fill('Lokesh@mmnovatech.com');
   await page.getByRole('textbox', { name: 'Password' }).click();
   await page.getByRole('textbox', { name: 'Password' }).fill('1234567890');
   await page.getByRole('button', { name: 'Login' }).click();
@@ -168,6 +168,8 @@ test('1. Dashboard Redirection checking', async ({ page }) => {
   await page.locator('[role="gridcell"]:not([aria-disabled="true"])').first().click();
   // Click Save
   await page.getByRole('button', { name: 'Save' }).click();
+
+
                   //Test case for Last Contact Date 
 await page.locator('.lucide.lucide-pencil').nth(13).click();
    const calendar = page.locator('.rdp-root');
@@ -201,17 +203,34 @@ await page.locator('.lucide.lucide-pencil').nth(13).click();
   await expect(saveBtn).toBeEnabled();
   await saveBtn.click();
  
+                                        //Test case for Provience
+  await page.locator('.lucide.lucide-pencil').nth(14).click();
+  await page.getByRole('textbox', { name: 'Enter Province' }).click();
+  await page.getByRole('textbox', { name: 'Enter Province' }).fill('Brampton');
+  await page.getByRole('button', { name: 'Save' }).click();
+  await page.waitForTimeout(3000);
 
-//Delete This Lead
+                              //Test case for Timeframe
+  await page.locator('.lucide.lucide-pencil').nth(15).click();
+  await page.getByRole('textbox', { name: 'Enter Timeframe' }).click();
+  await page.getByRole('textbox', { name: 'Enter Timeframe' }).fill('4 months');
+  await page.getByRole('button', { name: 'Save' }).click();
+  await page.waitForTimeout(3000);
+
+      //Test case for Urgency
+  await page.locator('.lucide.lucide-pencil').nth(16).click();
+  await page.getByRole('textbox', { name: 'Enter Urgency' }).click();
+  await page.getByRole('textbox', { name: 'Enter Urgency' }).fill('High');
+  await page.getByRole('button', { name: 'Save' }).click();
+  await page.waitForTimeout(3000);
+
+                                                //Delete This Lead
   await page.getByRole('button', { name: 'Delete lead' }).click();
   await page.getByRole('button', { name: 'Yes' }).click();
   await page.getByRole('button', { name: 'Yes, Confirm' }).click();
 
 
-  // await page.locator('div').filter({ hasText: /^Last Contact Date:N\/A$/ }).getByRole('button').click();
-  // await page.getByRole('button', { name: 'Enter Last Contact Date' }).click();
-  // await page.getByRole('button', { name: 'Thursday, April 2nd,' }).click();
-  // await page.getByRole('button', { name: 'Save' }).click();
+  
   // await page.locator('div').filter({ hasText: /^Province:N\/A$/ }).getByRole('button').click();
   // await page.getByRole('textbox', { name: 'Enter Province' }).click();
   // await page.getByRole('textbox', { name: 'Enter Province' }).fill('Brampton');
