@@ -24,60 +24,7 @@ test('1. Dashboard Redirection checking', async ({ page }) => {
   await TestData.locator('.text-sky-600').first().click();
   await page.waitForTimeout(7000);
    
-      await page.locator('.lucide.lucide-pencil').nth(16).click();
-  await page.getByRole('textbox', { name: 'Enter Urgency' }).click();
-  await page.getByRole('textbox', { name: 'Enter Urgency' }).fill('High');
-  await page.getByRole('button', { name: 'Save' }).click();
-  await page.waitForTimeout(3000);
-  //  await page.locator('.lucide.lucide-pencil').nth(13).click();
-  //  const calendar = page.locator('.rdp-root');
-  // await calendar.waitFor();
-
-  // // ---------------- RANDOM MONTH ----------------
-  // const monthDropdown = calendar.getByRole('combobox').first();
-  // await monthDropdown.click();
-
-  // const months = page.locator('[role="option"]');
-  // const monthCount = await months.count();
-
-  // const randomMonth = Math.floor(Math.random() * monthCount);
-  // const monthText = await months.nth(randomMonth).innerText();
-
-  // await months.nth(randomMonth).click();
-
-
-  // // ---------------- RANDOM YEAR ----------------
-  // const yearDropdown = calendar.getByRole('combobox').nth(1);
-  // await yearDropdown.click();
-
-  // const years = page.locator('[role="option"]');
-  // const yearCount = await years.count();
-
-  // const randomYear = Math.floor(Math.random() * yearCount);
-  // const yearText = await years.nth(randomYear).innerText();
-
-  // await years.nth(randomYear).click();
-
-
-  // // ---------------- RANDOM DATE ----------------
-  // const dates = calendar.locator('.rdp-day:not(.rdp-day_disabled)');
-  // const dateCount = await dates.count();
-
-  // const randomDate = Math.floor(Math.random() * dateCount);
-  // const dateText = await dates.nth(randomDate).innerText();
-
-  // await dates.nth(randomDate).click();
-
-
-  // // ---------------- PRINT SELECTED DATE ----------------
-  // console.log(`Selected Date: ${dateText} ${monthText} ${yearText}`);
-
-
-  // // ---------------- CLICK SAVE ----------------
-  // const saveBtn = page.getByRole('button', { name: 'Save' });
-  // await expect(saveBtn).toBeEnabled();
-  // await saveBtn.click();
- 
+  
 
 
 
