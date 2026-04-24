@@ -182,7 +182,7 @@ await page.waitForTimeout(2000);
       results.first().waitFor({ state: 'visible' }).catch(() => {}),
       noData.waitFor({ state: 'visible' }).catch(() => {})
     ]);
-
+    await page.waitForTimeout(3000);
     // CASE 1 — No results
     if (await noData.isVisible()) {
       await expect(noData).toContainText('No people found');
