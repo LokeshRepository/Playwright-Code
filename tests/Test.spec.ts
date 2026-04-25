@@ -24,19 +24,47 @@ test('1. Dashboard Redirection checking', async ({ page }) => {
   await TestData.locator('.text-sky-600').first().click();
   await page.waitForTimeout(7000);
    
-  await page.locator('section').filter({ hasText: /^Is this lead a Realtor\?$/ }).getByRole('button').nth(1).click();
-  await page.locator('section').filter({ hasText: /^Is this lead a Realtor\?$/ }).getByRole('button').first().click();
-  await page.getByRole('heading', { name: 'Social Profile' }).locator('svg').click();
-  await page.getByRole('textbox', { name: 'Instagram profile URL' }).click();
-  await page.getByRole('textbox', { name: 'Instagram profile URL' }).fill('instagram.com');
-  await page.getByRole('textbox', { name: 'Facebook profile URL' }).click();
-  await page.getByRole('textbox', { name: 'Facebook profile URL' }).fill('Facebook.com');
-  await page.getByRole('textbox', { name: 'Twitter profile URL' }).click();
-  await page.getByRole('textbox', { name: 'Twitter profile URL' }).fill('Twitter.com');
-  await page.getByRole('button', { name: 'Save' }).click();
-  await page.getByText('Custom Lead Data').click();
-  await page.locator('div').filter({ hasText: /^Mortgage typeSelect$/ }).getByRole('combobox').click();
-  await page.getByText('Refinance/Renewal').click();
-  await page.getByRole('button', { name: 'Save' }).click();
+  
 
+// open Lead Rating dropdown
+await page
+  .locator('div')
+  .filter({ hasText: /^Lead RatingSelect$/ })
+  .getByRole('combobox')
+  .click();
+
+// wait for options
+await page.locator('div[role="option"]').first().waitFor();
+
+// get all Lead Rating options
+const leadRatingOptions = page.locator('div[role="option"]');
+
+// count options
+const leadRatingCount = await leadRatingOptions.count();
+console.log("Total Lead Rating Options:", leadRatingCount);
+
+// print all options
+for (let i = 0; i < leadRatingCount; i++) {
+  const text = await leadRatingOptions.nth(i).textContent();
+  console.log(`Lead Rating Option ${i}:`, text);
+}
+
+// random index
+const randomLeadRatingIndex =
+  Math.floor(Math.random() * leadRatingCount);
+
+console.log("Random Index Selected:", randomLeadRatingIndex);
+
+// selected value
+const selectedLeadRating =
+  await leadRatingOptions.nth(randomLeadRatingIndex).textContent();
+
+console.log("Selected Lead Rating:", selectedLeadRating);
+
+// click random option
+await leadRatingOptions.nth(randomLeadRatingIndex).click();
+
+// click save
+await page.getByRole('button', { name: 'Save' }).click();
+  
 });

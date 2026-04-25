@@ -229,25 +229,87 @@ await page.locator('.lucide.lucide-pencil').nth(13).click();
   await page.getByRole('button', { name: 'Yes' }).click();
   await page.getByRole('button', { name: 'Yes, Confirm' }).click();
 
+  //Is Realtor button Validation
+  await page.locator('section').filter({ hasText: /^Is this lead a Realtor\?$/ }).getByRole('button').nth(1).click();
+  await page.locator('section').filter({ hasText: /^Is this lead a Realtor\?$/ }).getByRole('button').first().click();
+
+
+                                        //Test case Social media Link Section
+  await page.getByRole('heading', { name: 'Social Profile' }).locator('svg').click();
+  await page.getByRole('textbox', { name: 'Instagram profile URL' }).click();
+  await page.getByRole('textbox', { name: 'Instagram profile URL' }).fill('instagram.com');
+  await page.getByRole('textbox', { name: 'Facebook profile URL' }).click();
+  await page.getByRole('textbox', { name: 'Facebook profile URL' }).fill('Facebook.com');
+  await page.getByRole('textbox', { name: 'Twitter profile URL' }).click();
+  await page.getByRole('textbox', { name: 'Twitter profile URL' }).fill('Twitter.com');
+  await page.getByRole('button', { name: 'Save' }).click();
+
+  //Test for Custom Lead data
+ await page.getByText('Custom Lead Data').click();
+
+ //Morgage type of Custom data 
+await page
+  .locator('div')
+  .filter({ hasText: /^Mortgage typeSelect$/ })
+  .getByRole('combobox')
+  .click();
+await page.locator('div[role="option"]').first().waitFor();
+const mortgageOptions = page.locator('div[role="option"]');
+const optionCount = await mortgageOptions.count();
+console.log("Total Mortgage Options:", optionCount);
+for (let i = 0; i < optionCount; i++)
+   {
+  const text = await mortgageOptions.nth(i).textContent();
+  console.log(`Option ${i}:`, text);
+  }
+const RI = Math.floor(Math.random() * optionCount);
+console.log("Random Index Selected:", RI);
+const selectedMortgage = await mortgageOptions.nth(RI).textContent();
+console.log("Selected Mortgage Type:", selectedMortgage);
+await mortgageOptions.nth(RI).click();
+
+
+//Morgage Status of Custom data 
+ page.locator('div').filter({ hasText: /^Mortgage StatusSelect$/ }).getByRole('combobox').click();
+// wait for options
+await page.locator('div[role="option"]').first().waitFor();
+const mortgageStatusOptions = page.locator('div[role="option"]');
+const mortgageStatusCount = await mortgageStatusOptions.count();
+console.log("Total Mortgage Status Options:", mortgageStatusCount);
+for (let i = 0; i < mortgageStatusCount; i++) {
+  const text = await mortgageStatusOptions.nth(i).textContent();
+  console.log(`Option ${i}:`, text);
+}
+const RI2 = Math.floor(Math.random() * mortgageStatusCount);
+console.log("Random Index Selected:", RI2);
+const selectedMortgageStatus = await mortgageStatusOptions.nth(RI2).textContent();
+console.log("Selected Mortgage Status:", selectedMortgageStatus);
+await mortgageStatusOptions.nth(RI2).click();
+
+
+// open Lead Rating dropdown
+await page.locator('div').filter({ hasText: /^Lead RatingSelect$/ }).getByRole('combobox').click();
+await page.locator('div[role="option"]').first().waitFor();
+const leadRatingOptions = page.locator('div[role="option"]');
+const leadRatingCount = await leadRatingOptions.count();
+console.log("Total Lead Rating Options:", leadRatingCount);
+// print all options
+for (let i = 0; i < leadRatingCount; i++) 
+  {
+  const text = await leadRatingOptions.nth(i).textContent();
+  console.log(`Lead Rating Option ${i}:`, text);
+  }
+const RI3 =Math.floor(Math.random() * leadRatingCount);
+console.log("Random Index Selected:", RI3);
+const selectedLeadRating =
+  await leadRatingOptions.nth(RI3).textContent();
+console.log("Selected Lead Rating:", selectedLeadRating);
+await leadRatingOptions.nth(RI3).click();
+// save
+await page.getByRole('button', { name: 'Save' }).click();
 
   
-  // await page.locator('div').filter({ hasText: /^Province:N\/A$/ }).getByRole('button').click();
-  // await page.getByRole('textbox', { name: 'Enter Province' }).click();
-  // await page.getByRole('textbox', { name: 'Enter Province' }).fill('Brampton');
-  // await page.getByRole('button', { name: 'Save' }).click();
-  // await page.locator('div').filter({ hasText: /^Timeframe:N\/A$/ }).getByRole('button').click();
-  // await page.getByRole('textbox', { name: 'Enter Timeframe' }).click();
-  // await page.getByRole('textbox', { name: 'Enter Timeframe' }).fill('2 months');
-  // await page.getByRole('button', { name: 'Save' }).click();
-  // await page.locator('div').filter({ hasText: /^Urgency:N\/A$/ }).getByRole('button').click();
-  // await page.getByRole('textbox', { name: 'Enter Urgency' }).click();
-  // await page.getByRole('textbox', { name: 'Enter Urgency' }).fill('Hogh');
-  // await page.getByRole('textbox', { name: 'Enter Urgency' }).press('ArrowLeft');
-  // await page.getByRole('textbox', { name: 'Enter Urgency' }).press('ArrowLeft');
-  // await page.getByRole('textbox', { name: 'Enter Urgency' }).press('ArrowLeft');
-  // await page.getByRole('textbox', { name: 'Enter Urgency' }).press('ArrowRight');
-  // await page.getByRole('textbox', { name: 'Enter Urgency' }).fill('High');
-  // await page.getByRole('button', { name: 'Save' }).click();
+  
   // await page.locator('div').filter({ hasText: /^Birthday:N\/A$/ }).getByRole('button').click();
   // await page.getByRole('button', { name: 'Enter Birthday' }).click();
   // await page.getByRole('button', { name: '1995' }).click();
