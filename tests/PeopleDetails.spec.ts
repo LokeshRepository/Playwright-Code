@@ -77,10 +77,32 @@ test('1. Dashboard Redirection checking', async ({ page }) => {
   await page.getByRole('button', { name: 'Save' }).click();
 
                                               //Test case for Lead Type Testing
-  await page.locator('.lucide.lucide-pencil').nth(4).click();                                                
+  // await page.locator('.lucide.lucide-pencil').nth(4).click();                                                
+  // await page.locator('#leadType').click();
+  // const leadTypeOptions = page.getByRole('option');
+  // const leadTypeCount = await leadTypeOptions.count();
+  // const randomLeadTypeIndex = Math.floor(Math.random() * leadTypeCount);
+  // const selectedLeadType = await leadTypeOptions.nth(randomLeadTypeIndex).textContent();
+  // console.log("Selected Lead Type:", selectedLeadType);
+  // await leadTypeOptions.nth(randomLeadTypeIndex).click();
+  // await page.waitForTimeout(2000);
+  // await page.getByRole('button', { name: 'Save' }).waitFor();
+  // await page.getByRole('button', { name: 'Save' }).click();
+
+
+   await page.locator('.lucide.lucide-pencil').nth(4).click();                                                
   await page.locator('#leadType').click();
   const leadTypeOptions = page.getByRole('option');
   const leadTypeCount = await leadTypeOptions.count();
+  // collect options except Seller
+const filteredIndexes: number[] = [];
+for (let i = 0; i < leadTypeCount; i++) {
+  const text = await leadTypeOptions.nth(i).textContent();
+  if (text?.trim() !== 'Seller') {
+    filteredIndexes.push(i);
+  }
+}
+
   const randomLeadTypeIndex = Math.floor(Math.random() * leadTypeCount);
   const selectedLeadType = await leadTypeOptions.nth(randomLeadTypeIndex).textContent();
   console.log("Selected Lead Type:", selectedLeadType);
@@ -88,6 +110,7 @@ test('1. Dashboard Redirection checking', async ({ page }) => {
   await page.waitForTimeout(2000);
   await page.getByRole('button', { name: 'Save' }).waitFor();
   await page.getByRole('button', { name: 'Save' }).click();
+
 
                                                       //Test Case for Address
   await page.locator('.lucide.lucide-pencil').nth(5).click();
@@ -306,15 +329,38 @@ await leadRatingOptions.nth(RI3).click();
 //Purchased Anniversary of Custom data 
 //Wedding Anniversary of Custom data 
 
-
 //Relgion of Custom data 
 await page.locator('input[name="religion"]').fill('Christian');
 
 //Main Agent of Custom data 
 await page.locator('input[name="main_agent"]').fill('Lokesh');
 
-//Mortgage_agent of Custom data 
-await page.locator('input[name="mortgage_agent"]').fill('Lokesh');
+//Mortgage Agent of Custom data 
+await page.locator('input[name="mortgage_agent"]').fill('Sahil');
+
+//List Agent of Custom data 
+await page.locator('input[name="list_agent"]').fill('Sahil');
+
+//Area of Interest of Custom data 
+await page.locator('input[name="area_of_interest"]').fill('Brampton');
+
+//Parking type of Custom data
+await page.locator('div').filter({ hasText: /^Parking TypeSelect$/ }).getByRole('combobox').click();
+await page.locator('div[role="option"]').first().waitFor();
+const parkingTypeOptions = page.locator('div[role="option"]');
+const parkingTypeCount = await parkingTypeOptions.count();
+console.log("Total Parking Type Options:", parkingTypeCount);
+for (let i = 0; i < parkingTypeCount; i++) 
+  {
+  const text = await parkingTypeOptions.nth(i).textContent();
+  console.log(`Parking Type Option ${i}:`, text);
+  }
+const RI4 = Math.floor(Math.random() * parkingTypeCount);
+console.log("Random Index Selected:", RI4);
+const selectedParkingType =
+  await parkingTypeOptions.nth(RI4).textContent();
+console.log("Selected Parking Type:", selectedParkingType);
+await parkingTypeOptions.nth(RI4).click();
 
 
 // save

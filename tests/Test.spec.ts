@@ -26,9 +26,25 @@ test('1. Dashboard Redirection checking', async ({ page }) => {
    
   
 
-//List Agent of Custom data 
-await page.locator('input[name="list_agent"]').fill('Sahil');
-// click save
-await page.getByRole('button', { name: 'Save' }).click();
+await page.locator('.lucide.lucide-pencil').nth(4).click();                                                
+  await page.locator('#leadType').click();
+  const leadTypeOptions = page.getByRole('option');
+  const leadTypeCount = await leadTypeOptions.count();
+  // collect options except Seller
+const filteredIndexes: number[] = [];
+for (let i = 0; i < leadTypeCount; i++) {
+  const text = await leadTypeOptions.nth(i).textContent();
+  if (text?.trim() !== 'Seller') {
+    filteredIndexes.push(i);
+  }
+}
+
+  const randomLeadTypeIndex = Math.floor(Math.random() * leadTypeCount);
+  const selectedLeadType = await leadTypeOptions.nth(randomLeadTypeIndex).textContent();
+  console.log("Selected Lead Type:", selectedLeadType);
+  await leadTypeOptions.nth(randomLeadTypeIndex).click();
+  await page.waitForTimeout(2000);
+  await page.getByRole('button', { name: 'Save' }).waitFor();
+  await page.getByRole('button', { name: 'Save' }).click();
   
 });
