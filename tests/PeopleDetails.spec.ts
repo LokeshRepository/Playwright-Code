@@ -224,10 +224,7 @@ await page.locator('.lucide.lucide-pencil').nth(13).click();
   await page.getByRole('button', { name: 'Save' }).click();
   await page.waitForTimeout(3000);
 
-                                                //Delete This Lead
-  await page.getByRole('button', { name: 'Delete lead' }).click();
-  await page.getByRole('button', { name: 'Yes' }).click();
-  await page.getByRole('button', { name: 'Yes, Confirm' }).click();
+                                
 
   //Is Realtor button Validation
   await page.locator('section').filter({ hasText: /^Is this lead a Realtor\?$/ }).getByRole('button').nth(1).click();
@@ -305,10 +302,25 @@ const selectedLeadRating =
   await leadRatingOptions.nth(RI3).textContent();
 console.log("Selected Lead Rating:", selectedLeadRating);
 await leadRatingOptions.nth(RI3).click();
+
+//Purchased Anniversary of Custom data 
+//Wedding Anniversary of Custom data 
+
+
+//Relgion of Custom data 
+await page.locator('input[name="religion"]').fill('Christian');
+
+//Main Agent of Custom data 
+await page.locator('input[name="Main Agent"]').fill('Lokesh');
+
+
 // save
 await page.getByRole('button', { name: 'Save' }).click();
 
-  
+                 //Delete This Lead
+  await page.getByRole('button', { name: 'Delete lead' }).click();
+  await page.getByRole('button', { name: 'Yes' }).click();
+  await page.getByRole('button', { name: 'Yes, Confirm' }).click();
   
   // await page.locator('div').filter({ hasText: /^Birthday:N\/A$/ }).getByRole('button').click();
   // await page.getByRole('button', { name: 'Enter Birthday' }).click();

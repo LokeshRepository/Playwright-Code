@@ -26,44 +26,9 @@ test('1. Dashboard Redirection checking', async ({ page }) => {
    
   
 
-// open Lead Rating dropdown
-await page
-  .locator('div')
-  .filter({ hasText: /^Lead RatingSelect$/ })
-  .getByRole('combobox')
-  .click();
 
-// wait for options
-await page.locator('div[role="option"]').first().waitFor();
-
-// get all Lead Rating options
-const leadRatingOptions = page.locator('div[role="option"]');
-
-// count options
-const leadRatingCount = await leadRatingOptions.count();
-console.log("Total Lead Rating Options:", leadRatingCount);
-
-// print all options
-for (let i = 0; i < leadRatingCount; i++) {
-  const text = await leadRatingOptions.nth(i).textContent();
-  console.log(`Lead Rating Option ${i}:`, text);
-}
-
-// random index
-const randomLeadRatingIndex =
-  Math.floor(Math.random() * leadRatingCount);
-
-console.log("Random Index Selected:", randomLeadRatingIndex);
-
-// selected value
-const selectedLeadRating =
-  await leadRatingOptions.nth(randomLeadRatingIndex).textContent();
-
-console.log("Selected Lead Rating:", selectedLeadRating);
-
-// click random option
-await leadRatingOptions.nth(randomLeadRatingIndex).click();
-
+//Main Agent of Custom data 
+await page.locator('input[name="Main Agent"]').fill('Lokesh');
 // click save
 await page.getByRole('button', { name: 'Save' }).click();
   
