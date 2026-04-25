@@ -311,7 +311,10 @@ await leadRatingOptions.nth(RI3).click();
 await page.locator('input[name="religion"]').fill('Christian');
 
 //Main Agent of Custom data 
-await page.locator('input[name="Main Agent"]').fill('Lokesh');
+await page.locator('input[name="main_agent"]').fill('Lokesh');
+
+//Mortgage_agent of Custom data 
+await page.locator('input[name="mortgage_agent"]').fill('Lokesh');
 
 
 // save

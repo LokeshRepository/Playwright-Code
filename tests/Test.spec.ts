@@ -26,9 +26,8 @@ test('1. Dashboard Redirection checking', async ({ page }) => {
    
   
 
-
-//Main Agent of Custom data 
-await page.locator('input[name="Main Agent"]').fill('Lokesh');
+//List Agent of Custom data 
+await page.locator('input[name="list_agent"]').fill('Sahil');
 // click save
 await page.getByRole('button', { name: 'Save' }).click();
   
