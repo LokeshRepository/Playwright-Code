@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
 
 test('1. Dashboard Redirection checking', async ({ page }) => {
   await page.goto('https://app.novacrm.ca/');
@@ -102,7 +102,6 @@ for (let i = 0; i < leadTypeCount; i++) {
     filteredIndexes.push(i);
   }
 }
-
   const randomLeadTypeIndex = Math.floor(Math.random() * leadTypeCount);
   const selectedLeadType = await leadTypeOptions.nth(randomLeadTypeIndex).textContent();
   console.log("Selected Lead Type:", selectedLeadType);
@@ -366,19 +365,59 @@ await parkingTypeOptions.nth(RI4).click();
 // save
 await page.getByRole('button', { name: 'Save' }).click();
 
-                 //Delete This Lead
-  await page.getByRole('button', { name: 'Delete lead' }).click();
-  await page.getByRole('button', { name: 'Yes' }).click();
-  await page.getByRole('button', { name: 'Yes, Confirm' }).click();
+
+//Task and Appointments 
+  await page.getByText('Tasks and Appointments').click();
+  await page.getByRole('button', { name: 'Add New' }).click();
+  await page.getByPlaceholder('Enter task title').fill('Test Task');
+  await selectRandomDropdown(page, 'Select type');
+  await selectRandomDropdown(page, 'Select time');
+
+  // click create
+  await page.getByRole('button', { name: 'Create' }).click();
+  await page.getByRole('tab', { name: 'Appointments' }).click();
+  await page.getByRole('button', { name: 'Add New' }).click();
+  await page.getByPlaceholder('Appointment title').fill('Test Appointment');
+  await selectRandomDropdown(page, 'Type');
+  await selectRandomDropdown(page, 'Start time');
+  await selectRandomDropdown(page, 'End time');
+  await page.getByPlaceholder('description').fill('Test Appointment');
+  await page.getByRole('button', { name: 'Create' }).click();
+
+  //                //Delete This Lead
+  // await page.getByRole('button', { name: 'Delete lead' }).click();
+  // await page.getByRole('button', { name: 'Yes' }).click();
+  // await page.getByRole('button', { name: 'Yes, Confirm' }).click();
   
-  // await page.locator('div').filter({ hasText: /^Birthday:N\/A$/ }).getByRole('button').click();
-  // await page.getByRole('button', { name: 'Enter Birthday' }).click();
-  // await page.getByRole('button', { name: '1995' }).click();
-  // await page.getByRole('button', { name: 'Jun' }).click();
-  // await page.getByRole('button', { name: 'Wednesday, June 7th,' }).click();
-  // await page.getByRole('button', { name: 'Save' }).click();
-  // await page.locator('div').filter({ hasText: /^Anniversary:N\/A$/ }).getByRole('button').click();
-  // await page.getByRole('button', { name: 'Enter Anniversary' }).click();
-  // await page.getByRole('button', { name: 'Tuesday, April 7th,' }).click();
-  // await page.getByRole('button', { name: 'Save' }).click();
+
 });
+
+async function selectRandomDropdown(page: Page, dropdownName: string) {
+
+  // open dropdown
+  await page.getByRole('button', { name: dropdownName }).click();
+await page.waitForTimeout(2000);
+
+  // wait dropdown
+  const dropdown = page.locator('.max-h-\\[300px\\].overflow-y-auto');
+  await dropdown.waitFor();
+
+  // get options
+  const options = dropdown.locator('> div');
+
+  // count
+  const count = await options.count();
+  console.log(`${dropdownName} count:`, count);
+
+  // random index
+  const randomIndex = Math.floor(Math.random() * count);
+
+  // text
+  const selectedText = await options.nth(randomIndex).textContent();
+  console.log(`Selected ${dropdownName}:`, selectedText);
+
+  // click
+  await options.nth(randomIndex).click();
+
+}
+
