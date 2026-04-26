@@ -28,35 +28,17 @@ test('1. Dashboard Redirection checking', async ({ page }) => {
 
 
   await page.getByText('Tasks and Appointments').click();
-  await page.getByRole('button', { name: 'Add New' }).click();
-
-  // fill title
-  await page.getByPlaceholder('Enter task title').fill('Test Task');
-
-  // random task type
-  await selectRandomDropdown(page, 'Select type');
-
-  // random time
-  await selectRandomDropdown(page, 'Select time');
-
-  // click create
-  await page.getByRole('button', { name: 'Create' }).click();
-
-
-
-
-
 
   await page.getByRole('tab', { name: 'Appointments' }).click();
   await page.getByRole('button', { name: 'Add New' }).click();
 
   await page.getByPlaceholder('Appointment title').fill('Test Appointment');
-
+  await page.getByPlaceholder('Location').fill('Mumbai');
   await selectRandomDropdown(page, 'Type');
   await selectRandomDropdown(page, 'Start time');
-  await selectRandomDropdown(page, 'End time');
   await page.getByPlaceholder('description').fill('Test Appointment');
   await page.getByRole('button', { name: 'Create' }).click();
+  await page.waitForTimeout(5000);
 
 
 });

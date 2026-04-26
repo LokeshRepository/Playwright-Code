@@ -366,24 +366,26 @@ await parkingTypeOptions.nth(RI4).click();
 await page.getByRole('button', { name: 'Save' }).click();
 
 
-//Task and Appointments 
+//Task
   await page.getByText('Tasks and Appointments').click();
   await page.getByRole('button', { name: 'Add New' }).click();
   await page.getByPlaceholder('Enter task title').fill('Test Task');
   await selectRandomDropdown(page, 'Select type');
   await selectRandomDropdown(page, 'Select time');
-
-  // click create
   await page.getByRole('button', { name: 'Create' }).click();
-  await page.getByRole('tab', { name: 'Appointments' }).click();
+
+// Appointments 
+   await page.getByRole('tab', { name: 'Appointments' }).click();
   await page.getByRole('button', { name: 'Add New' }).click();
   await page.getByPlaceholder('Appointment title').fill('Test Appointment');
+  await page.getByPlaceholder('Location').fill('Mumbai');
   await selectRandomDropdown(page, 'Type');
   await selectRandomDropdown(page, 'Start time');
-  await selectRandomDropdown(page, 'End time');
   await page.getByPlaceholder('description').fill('Test Appointment');
   await page.getByRole('button', { name: 'Create' }).click();
+  await page.waitForTimeout(1000);
 
+  
   //                //Delete This Lead
   // await page.getByRole('button', { name: 'Delete lead' }).click();
   // await page.getByRole('button', { name: 'Yes' }).click();
