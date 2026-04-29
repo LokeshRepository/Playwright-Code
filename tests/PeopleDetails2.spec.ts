@@ -380,6 +380,42 @@ const selectedParkingType =
 console.log("Selected Parking Type:", selectedParkingType);
 await parkingTypeOptions.nth(RI4).click();
 
+//Basement of custome data
+await page.locator('div').filter({ hasText: /^BasementSelect$/ }).getByRole('combobox').click();
+await page.locator('div[role="option"]').first().waitFor();
+const basementOptions = page.locator('div[role="option"]');
+const basementCount = await basementOptions.count();
+console.log("Total Basement Options:", basementCount);
+for (let i = 0; i < basementCount; i++)
+{
+  const optionText = await basementOptions.nth(i).textContent();
+  console.log(`Basement Option ${i}:`, optionText);
+}
+const randomBasementIndex = Math.floor(Math.random() * basementCount);
+console.log("Random Index Selected:", randomBasementIndex);
+const selectedBasement =
+await basementOptions.nth(randomBasementIndex).textContent();
+console.log("Selected Basement:", selectedBasement);
+await basementOptions.nth(randomBasementIndex).click();
+await page.getByRole('button', { name: 'Save' }).click();
+
+//Parking of custom data 
+await page.locator('div').filter({ hasText: /^ParkingSelect$/ }).getByRole('combobox').click();
+await page.locator('div[role="option"]').first().waitFor();
+const parkingDropdownOptions = page.locator('div[role="option"]');
+const parkingDropdownCount = await parkingDropdownOptions.count();
+console.log("Total Parking Options:", parkingDropdownCount);
+ for (let i = 0; i < parkingDropdownCount; i++)
+   {
+  const optionText = await parkingDropdownOptions.nth(i).textContent();
+  console.log(`Parking Option ${i}:`, optionText);
+   }
+const randomParkingIndex = Math.floor(Math.random() * parkingDropdownCount);
+console.log("Random Index Selected:", randomParkingIndex);
+const selectedParkingOption =
+await parkingDropdownOptions.nth(randomParkingIndex).textContent();
+console.log("Selected Parking:", selectedParkingOption);
+await parkingDropdownOptions.nth(randomParkingIndex).click();
 
 // save
 await page.getByRole('button', { name: 'Save' }).click();

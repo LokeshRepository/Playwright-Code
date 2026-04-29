@@ -29,7 +29,25 @@ test('1. Dashboard Redirection checking', async ({ page }) => {
 //   .setInputFiles('tests/Lokesh Joshi_IDCard.pdf');
 //  await page.waitForTimeout(2000);
 
-   await page.locator('input[name="planning_to_sell"]').fill('2 months');
+ await page.locator('div')
+  .filter({ hasText: /^BasementSelect$/ })
+  .getByRole('combobox')
+  .click();
+await page.locator('div[role="option"]').first().waitFor();
+const parkingTypeOptions = page.locator('div[role="option"]');
+const parkingTypeCount = await parkingTypeOptions.count();
+console.log("Total Parking Type Options:", parkingTypeCount);
+for (let i = 0; i < parkingTypeCount; i++) 
+  {
+  const text = await parkingTypeOptions.nth(i).textContent();
+  console.log(`Parking Type Option ${i}:`, text);
+  }
+const RI4 = Math.floor(Math.random() * parkingTypeCount);
+console.log("Random Index Selected:", RI4);
+const selectedParkingType =
+  await parkingTypeOptions.nth(RI4).textContent();
+console.log("Selected Parking Type:", selectedParkingType);
+await parkingTypeOptions.nth(RI4).click();
 await page.getByRole('button', { name: 'Save' }).click();
 //   await page.locator('div', { hasText: 'Lokesh Joshi_IDCard.pdf' }).locator('.lucide-trash').click();
 // await page.locator('input[type="file"]').setInputFiles('tests/Lokesh Joshi_IDCard.pdf');
