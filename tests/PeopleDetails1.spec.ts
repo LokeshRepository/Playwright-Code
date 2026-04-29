@@ -123,6 +123,7 @@ for (let i = 0; i < leadTypeCount; i++) {
   await page.waitForTimeout(2000);
   await page.getByRole('button', { name: 'Save' }).waitFor();
   await page.getByRole('button', { name: 'Save' }).click();
+  await page.waitForTimeout(2000);
 });
 //7 Address
 test('7 Address', async () => {
@@ -138,7 +139,7 @@ test('7 Address', async () => {
 // type (not fill)
   await input.type('canada', { delay: 80 });
   // wait for dropdown to appear
-  await page.waitForTimeout(3000);
+  await page.waitForTimeout(2000);
   await page.locator('.pac-item').first().waitFor();
   // get all options
   const options1 = page.locator('.pac-item');
@@ -152,9 +153,9 @@ test('7 Address', async () => {
   console.log('Selected Address:', selectedAddress);
   // click random option
   await options1.nth(randomIndex1).click();
-  await page.waitForTimeout(3000);
+  await page.waitForTimeout(2000);
   await page.getByRole('button', { name: 'Save' }).click();
-
+  await page.waitForTimeout(2000);
 });
 //8 Assign Agent
 test('8 Assign Agent', async () => {
@@ -277,6 +278,7 @@ test('18 Urgency', async () => {
 test('19 Is realtor?', async () => {
 //Is Realtor button Validation
   await page.locator('section').filter({ hasText: /^Is this lead a Realtor\?$/ }).getByRole('button').nth(1).click();
+  await page.waitForTimeout(2000);
   await page.locator('section').filter({ hasText: /^Is this lead a Realtor\?$/ }).getByRole('button').first().click();
   await page.waitForTimeout(3000);
   });
@@ -356,9 +358,23 @@ console.log("Selected Lead Rating:", selectedLeadRating);
 await leadRatingOptions.nth(RI3).click();
 
 //Selling in of Custom data 
-await page.locator('div').filter({ hasText: /^ Selling inSelect$/ }).getByRole('combobox').click();
-await selectRandomDropdown(page, 'Selling in');
-await page.getByRole('button', { name: 'Save' }).click();
+await page.locator('div').filter({ hasText: /^Selling inSelect$/ }).getByRole('combobox').click();
+await page.locator('div[role="option"]').first().waitFor();
+const sellingInOptions = page.locator('div[role="option"]');
+const sellingInCount = await sellingInOptions.count();
+console.log("Total Selling In Options:", sellingInCount);
+for (let i = 0; i < sellingInCount; i++)
+   {
+const text = await sellingInOptions.nth(i).textContent();
+  console.log(`Option ${i}:`, text);
+   }
+const RI0 =
+Math.floor(Math.random() * sellingInCount);
+console.log("Random Index Selected:", RI0);
+const selectedSellingIn =
+await sellingInOptions.nth(RI0).textContent();
+console.log("Selected Selling In:", selectedSellingIn);
+await sellingInOptions.nth(RI0).click();
 
 
 //Purchased Anniversary of Custom data 

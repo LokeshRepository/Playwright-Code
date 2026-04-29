@@ -25,15 +25,42 @@ test('1. Dashboard Redirection checking', async ({ page }) => {
   await page.waitForTimeout(5000);
 
 
-
- await page.locator('div').filter({ hasText: /^Add$/ }).getByRole('button').click();
-
 // await page.locator('input[type="file"]')
 //   .setInputFiles('tests/Lokesh Joshi_IDCard.pdf');
 //  await page.waitForTimeout(2000);
-   
+
+   await page.locator('input[name="planning_to_sell"]').fill('2 months');
+await page.getByRole('button', { name: 'Save' }).click();
 //   await page.locator('div', { hasText: 'Lokesh Joshi_IDCard.pdf' }).locator('.lucide-trash').click();
-await page.locator('input[type="file"]').setInputFiles('tests/Lokesh Joshi_IDCard.pdf');
-await page.waitForTimeout(2000);
- await page.locator('div', { hasText: 'Lokesh Joshi_IDCard.pdf' }).locator('.lucide-trash').click();
+// await page.locator('input[type="file"]').setInputFiles('tests/Lokesh Joshi_IDCard.pdf');
+// await page.waitForTimeout(2000);
+//  await page.locator('div', { hasText: 'Lokesh Joshi_IDCard.pdf' }).locator('.lucide-trash').click();
 });
+async function selectRandomDropdown(page: Page, dropdownName: string) {
+
+  // open dropdown
+  await page.getByRole('button', { name: dropdownName }).click();
+await page.waitForTimeout(2000);
+
+  // wait dropdown
+  const dropdown = page.locator('.max-h-\\[300px\\].overflow-y-auto');
+  await dropdown.waitFor();
+
+  // get options
+  const options = dropdown.locator('> div');
+
+  // count
+  const count = await options.count();
+  console.log(`${dropdownName} count:`, count);
+
+  // random index
+  const randomIndex = Math.floor(Math.random() * count);
+
+  // text
+  const selectedText = await options.nth(randomIndex).textContent();
+  console.log(`Selected ${dropdownName}:`, selectedText);
+
+  // click
+  await options.nth(randomIndex).click();
+
+}
