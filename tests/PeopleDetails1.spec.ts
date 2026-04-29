@@ -416,6 +416,24 @@ await parkingTypeOptions.nth(RI4).click();
 //Planning to sell of Custom data 
 await page.locator('input[name="planning_to_sell"]').fill('2 months');
 
+//Listing Status of Custom data
+await page.locator('div').filter({ hasText: /^Listing StatusSelect$/ }).getByRole('combobox').click();
+await page.locator('div[role="option"]').first().waitFor();
+const listingStatusOptions = page.locator('div[role="option"]');
+const listingStatusCount = await listingStatusOptions.count();
+console.log("Total Listing Status Options:", listingStatusCount);
+for (let i = 0; i < listingStatusCount; i++) 
+{
+  const optionText = await listingStatusOptions.nth(i).textContent();
+  console.log(`Listing Status Option ${i}:`, optionText);
+}
+const randomListingStatusIndex = Math.floor(Math.random() * listingStatusCount);
+console.log("Random Index Selected:", randomListingStatusIndex);
+const selectedListingStatus =
+await listingStatusOptions.nth(randomListingStatusIndex).textContent();
+console.log("Selected Listing Status:", selectedListingStatus);
+await listingStatusOptions.nth(randomListingStatusIndex).click();
+
 //Basement of custome data
 await page.locator('div').filter({ hasText: /^BasementSelect$/ }).getByRole('combobox').click();
 await page.locator('div[role="option"]').first().waitFor();
@@ -433,7 +451,6 @@ const selectedBasement =
 await basementOptions.nth(randomBasementIndex).textContent();
 console.log("Selected Basement:", selectedBasement);
 await basementOptions.nth(randomBasementIndex).click();
-await page.getByRole('button', { name: 'Save' }).click();
 
 //Parking dropdown of custom data
 await page.locator('div').filter({ hasText: /^ParkingSelect$/ }).getByRole('combobox').click();

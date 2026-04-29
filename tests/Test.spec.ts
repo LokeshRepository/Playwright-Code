@@ -30,7 +30,7 @@ test('1. Dashboard Redirection checking', async ({ page }) => {
 //  await page.waitForTimeout(2000);
 
  await page.locator('div')
-  .filter({ hasText: /^BasementSelect$/ })
+  .filter({ hasText: /^Listing StatusSelect$/ })
   .getByRole('combobox')
   .click();
 await page.locator('div[role="option"]').first().waitFor();
