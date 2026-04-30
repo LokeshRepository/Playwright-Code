@@ -80,15 +80,15 @@ test('4 Email CRUD', async () => {
 test('5 Source Dropdown', async () => {
   await page.locator('.lucide.lucide-pencil').nth(3).click();
   await page.locator('#source').click();
-  const options = page.getByRole('option');// get options
-  const count = await options.count();// random index
+  const options = page.getByRole('option');
+  const count = await options.count();
   const randomIndex = Math.floor(Math.random() * count);
-  const selected = await options.nth(randomIndex).textContent();
+  const selected = (await options.nth(randomIndex).textContent())!;
   console.log("Selected value:", selected);
   await options.nth(randomIndex).click();
   await page.waitForTimeout(2000);
-  await page.getByRole('button', { name: 'Save' }).waitFor();
   await page.getByRole('button', { name: 'Save' }).click();
+  await expect(page.locator('#source')).toHaveText(selected.trim());
 });
 //6 Lead Type
 test('6 Lead Type', async () => {
@@ -515,8 +515,25 @@ const randomIndex = Math.floor(Math.random() * count);
 await gatewayOptions.nth(randomIndex).click();
 await page.waitForTimeout(2000);
   });
-//22 Task Creation
-test('22 Task Creation', async () => {
+
+  //Shortcut button redirection
+test('22 Shortcut button redirection', async () => {
+  const actions = page.locator('.flex.gap-2\\.5.mb-5');
+
+// Text
+await actions.locator('div.cursor-pointer', { hasText: 'Text' }).click();
+await expect(page).toHaveURL(/activity-tab=message/);
+
+// Email
+await actions.locator('div.cursor-pointer', { hasText: 'Email' }).click();
+await expect(page).toHaveURL(/activity-tab=email/);
+
+// Call
+await actions.locator('div.cursor-pointer', { hasText: 'Call' }).click();
+await expect(page).toHaveURL(/activity-tab=call/);
+   });
+//23 Task Creation
+test('23 Task Creation', async () => {
    await page.getByText('Tasks and Appointments').click();
   await page.getByRole('button', { name: 'Add New' }).click();
   await page.getByPlaceholder('Enter task title').fill('Test Task');
@@ -538,6 +555,8 @@ test('22 Appointment', async () => {
   await page.getByRole('button', { name: 'Create' }).click();
   await page.waitForTimeout(2000);
 });
+
+
 });
 async function selectRandomDropdown(page: Page, dropdownName: string) {
 
