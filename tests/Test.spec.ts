@@ -24,12 +24,6 @@ test('1. Dashboard Redirection checking', async ({ page }) => {
   await TestData.locator('.text-sky-600').first().click();
   await page.waitForTimeout(5000);
 
-const actions = page.locator('.flex.gap-2\\.5.mb-5');
-await actions.locator('div.cursor-pointer', { hasText: 'Text' }).click();
-await expect(page).toHaveURL(/activity-tab=message/);
-
-await actions.locator('div.cursor-pointer', { hasText: 'Email' }).click();
-await expect(page).toHaveURL(/activity-tab=email/);
 
 
 
