@@ -436,7 +436,21 @@ await parkingDropdownOptions.nth(randomParkingIndex).click();
 
 // save
 await page.getByRole('button', { name: 'Save' }).click();
+//Update stages
+const dropdown = page.locator(
+  'div.flex.items-center.gap-5.overflow-x-auto'
+);
 
+const gatewayOptions = dropdown.locator(
+  'div.cursor-pointer'
+);
+
+const count11 = await gatewayOptions.count();
+console.log("Total Options:", count11);
+
+const randomIndex11 = Math.floor(Math.random() * count);
+
+await gatewayOptions.nth(randomIndex11).click();
 
 //Task
   await page.getByText('Tasks and Appointments').click();

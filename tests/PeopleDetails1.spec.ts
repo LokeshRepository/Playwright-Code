@@ -43,9 +43,10 @@ test('2 Search Lead', async () => {
     has: page.getByText('lokesh@mmnovatech.com')
   });
   await expect(TestData).toBeVisible();
+  await page.waitForTimeout(2000);
   // click first name (Lokesh)
   await TestData.locator('.text-sky-600').first().click();
-   await page.waitForTimeout(7000);
+   await page.waitForTimeout(2000);
 
 //Step 2: Details verification +CRUD
   await page.locator('span:has-text("Phone:")')
@@ -162,7 +163,27 @@ test('8 Assign Agent', async () => {
   await page.locator('.lucide.lucide-pencil').nth(6).click();
   await page.getByRole('combobox').click();
   await page.getByLabel('Sahil Akbari').getByText('Sahil Akbari').click();
-  await page.getByRole('button', { name: 'Save' }).click();
+//   const agentOptions = page.locator('div[role="option"]');
+
+// const agentCount = await agentOptions.count();
+// console.log("Total Agent Options:", agentCount);
+
+// for (let i = 0; i < agentCount; i++) {
+//   const optionText = await agentOptions.nth(i).textContent();
+//   console.log(`Agent Option ${i}:`, optionText);
+// }
+
+// const randomAgentIndex = Math.floor(Math.random() * agentCount);
+// console.log("Random Index Selected:", randomAgentIndex);
+
+// const selectedAgent = await agentOptions
+//   .nth(randomAgentIndex)
+//   .textContent();
+
+// console.log("Selected Agent:", selectedAgent);
+
+// await agentOptions.nth(randomAgentIndex).click();
+   await page.getByRole('button', { name: 'Save' }).click();
 });
 //9 City
 test('9 City', async () => {
@@ -213,6 +234,7 @@ test('14 Start Date', async () => {
   await page.locator('[role="gridcell"]:not([aria-disabled="true"])').first().click();
   // Click Save
   await page.getByRole('button', { name: 'Save' }).click();
+  await page.waitForTimeout(2000);
 });
 //15 Last Contact Date
 test('15 Last Contact Date', async () => {
@@ -247,6 +269,7 @@ test('15 Last Contact Date', async () => {
   const saveBtn = page.getByRole('button', { name: 'Save' });
   await expect(saveBtn).toBeEnabled();
   await saveBtn.click();
+  await page.waitForTimeout(2000);
 });
 //16 Province
 test('16 Province', async () => {
@@ -293,6 +316,7 @@ test('19 Social Profile', async () => {
   await page.getByRole('textbox', { name: 'Twitter profile URL' }).click();
   await page.getByRole('textbox', { name: 'Twitter profile URL' }).fill('Twitter.com');
   await page.getByRole('button', { name: 'Save' }).click();
+  await page.waitForTimeout(2000);
 });
 //20 Custom Lead Data
 test('20 Custom Lead Data', async () => {
@@ -474,8 +498,25 @@ await parkingDropdownOptions.nth(randomParkingIndex).click();
 await page.getByRole('button', { name: 'Save' }).click();
 await page.waitForTimeout(3000);
 });
-//21 Task Creation
-test('21 Task Creation', async () => {
+test('21 Update stages ', async () => {
+const dropdown = page.locator(
+  'div.flex.items-center.gap-5.overflow-x-auto'
+);
+
+const gatewayOptions = dropdown.locator(
+  'div.cursor-pointer'
+);
+
+const count = await gatewayOptions.count();
+console.log("Total Options:", count);
+
+const randomIndex = Math.floor(Math.random() * count);
+
+await gatewayOptions.nth(randomIndex).click();
+await page.waitForTimeout(2000);
+  });
+//22 Task Creation
+test('22 Task Creation', async () => {
    await page.getByText('Tasks and Appointments').click();
   await page.getByRole('button', { name: 'Add New' }).click();
   await page.getByPlaceholder('Enter task title').fill('Test Task');
@@ -495,7 +536,7 @@ test('22 Appointment', async () => {
   await selectRandomDropdown(page, 'Start time');
   await page.getByPlaceholder('description').fill('Test Appointment');
   await page.getByRole('button', { name: 'Create' }).click();
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(2000);
 });
 });
 async function selectRandomDropdown(page: Page, dropdownName: string) {
